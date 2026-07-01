@@ -1,0 +1,98 @@
+[
+  {
+    "id": "27368d05-1283-491e-a631-5e6f75d801f9",
+    "customerName": "Manu Fernandez Parente",
+    "customerPhone": "987654321",
+    "deliveryAddress": "Av. J. M. de Pueyrredón 250",
+    "paymentMethod": "cash",
+    "items": [
+      {
+        "productId": "a7b3b44b-4b21-4f11-9a99-b1d5e2193b2a",
+        "name": "Fernet Branca 750ml",
+        "price": 8500,
+        "quantity": 1,
+        "subtotal": 8500
+      }
+    ],
+    "totalAmount": 8500,
+    "status": "pending",
+    "createdAt": "2026-06-26T01:55:18.257Z"
+  },
+  {
+    "id": "8f1da9ba-dbc0-41eb-a66b-7619b8c09e79",
+    "customerName": "Manu Fernandez Parente",
+    "customerPhone": "1234567890",
+    "deliveryAddress": "Av. J. M. de Pueyrredón 250",
+    "paymentMethod": "transfer",
+    "items": [
+      {
+        "productId": "a7b3b44b-4b21-4f11-9a99-b1d5e2193b2a",
+        "name": "Fernet Branca 750ml",
+        "price": 8500,
+        "quantity": 1,
+        "subtotal": 8500
+      }
+    ],
+    "totalAmount": 8500,
+    "status": "pending",
+    "createdAt": "2026-06-26T01:54:32.447Z"
+  },
+  {
+    "id": "1f886687-c6ed-4bfc-9e6a-38f515d2e197",
+    "customerName": "manuel",
+    "customerPhone": "1234567456",
+    "deliveryAddress": "Av. J. M. de Pueyrredón 250",
+    "lat": -31.42650938871365,
+    "lng": -64.19223060229365,
+    "paymentMethod": "cash",
+    "items": [
+      {
+        "productId": "a7b3b44b-4b21-4f11-9a99-b1d5e2193b2a",
+        "name": "Fernet Branca 750ml",
+        "price": 8500,
+        "quantity": 1,
+        "subtotal": 8500
+      }
+    ],
+    "totalAmount": 8500,
+    "status": "pending",
+    "createdAt": "2026-06-25T15:01:18.211Z"
+  },
+  {
+    "id": "b939d0d0-cdad-440a-9506-15d5a93b37a3",
+    "customerName": "Pedro Gomez",
+    "customerPhone": "1123456789",
+    "deliveryAddress": "Calle Falsa 123",
+    "paymentMethod": "card",
+    "items": [
+      {
+        "productId": "b8c3b44b-4b21-4f11-9a99-b1d5e2193b2b",
+        "name": "Cerveza Patagonia IPA 24.7 473ml",
+        "price": 3200,
+        "quantity": 1,
+        "subtotal": 3200
+      }
+    ],
+    "totalAmount": 3200,
+    "status": "pending",
+    "createdAt": "2026-06-25T14:15:41.563Z"
+  },
+  {
+    "id": "7885bafb-1c33-4032-b106-4a83d30eff86",
+    "customerName": "Juan",
+    "deliveryAddress": "CET n8",
+    "paymentMethod": "transfer",
+    "items": [
+      {
+        "productId": "630edf0c-cb22-40d6-a253-35cefe1f77fb",
+        "name": "Jägermeister 700ml",
+        "price": 40000,
+        "quantity": 1,
+        "subtotal": 40000
+      }
+    ],
+    "totalAmount": 40000,
+    "status": "pending",
+    "createdAt": "2026-07-01T15:22:03.309Z"
+  }
+]
