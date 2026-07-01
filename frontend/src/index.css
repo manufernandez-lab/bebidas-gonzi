@@ -136,6 +136,36 @@ body {
   padding: 0;
 }
 
+.btn-whatsapp {
+  background: #25D366;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
+}
+
+.btn-whatsapp:hover:not(:disabled) {
+  background: #20BA56;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(37, 211, 102, 0.4);
+}
+
+@keyframes pulse-whatsapp {
+  0% {
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(37, 211, 102, 0.6);
+  }
+  100% {
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
+  }
+}
+
+.btn-whatsapp-pulse {
+  animation: pulse-whatsapp 2s infinite;
+}
+
+
 /* Controles de Formulario */
 .form-group {
   margin-bottom: 1.25rem;

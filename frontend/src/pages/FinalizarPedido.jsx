@@ -37,22 +37,102 @@ export default function FinalizarPedido() {
       return;
     }
 
-    setLocationStatus('Obteniendo coordenadas...');
+    setLocationStatus('Obteniendo coordenadas (GPS)...');
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setCoords({ lat: latitude, lng: longitude });
-        setValue('lat', latitude);
-        setValue('lng', longitude);
-        setLocationStatus('📍 Ubicación GPS obtenida con éxito.');
-      },
-      (error) => {
-        console.error(error);
-        setLocationStatus('No se pudo acceder a tu ubicación. Por favor, escribe tu dirección detallada.');
-      },
-      { enableHighAccuracy: true, timeout: 8000 }
-    );
+    const success = (position) => {
+      const { latitude, longitude } = position.coords;
+      setCoords({ lat: latitude, lng: longitude });
+      setValue('lat', latitude);
+      setValue('lng', longitude);
+      setLocationStatus('📍 Coordenadas obtenidas. Buscando dirección...');
+
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`, {
+        headers: {
+          'Accept-Language': 'es'
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.address) {
+            const addressInfo = data.address;
+            const street = addressInfo.road || addressInfo.pedestrian || addressInfo.suburb || '';
+            const number = addressInfo.house_number || '';
+            const city = addressInfo.city || addressInfo.town || addressInfo.village || '';
+            
+            let formattedAddress = '';
+            if (street) {
+              formattedAddress = street;
+              if (number) formattedAddress += ` ${number}`;
+              if (city) formattedAddress += `, ${city}`;
+            } else {
+              formattedAddress = data.display_name;
+            }
+            
+            setValue('deliveryAddress', formattedAddress, { shouldValidate: true });
+            setLocationStatus('📍 Ubicación y dirección obtenidas con éxito.');
+          } else {
+            setLocationStatus('📍 Ubicación obtenida. Por favor, escribe tu dirección manualmente.');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          setLocationStatus('📍 Ubicación obtenida. Por favor, escribe tu dirección manualmente.');
+        });
+    };
+
+    const error = (err) => {
+      console.warn(`ERROR GPS (${err.code}): ${err.message}. Intentando aproximado...`);
+      setLocationStatus('Buscando ubicación aproximada...');
+      
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setCoords({ lat: latitude, lng: longitude });
+          setValue('lat', latitude);
+          setValue('lng', longitude);
+          
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`, {
+            headers: {
+              'Accept-Language': 'es'
+            }
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (data && data.address) {
+                const addressInfo = data.address;
+                const street = addressInfo.road || addressInfo.pedestrian || addressInfo.suburb || '';
+                const number = addressInfo.house_number || '';
+                const city = addressInfo.city || addressInfo.town || addressInfo.village || '';
+                
+                let formattedAddress = '';
+                if (street) {
+                  formattedAddress = street;
+                  if (number) formattedAddress += ` ${number}`;
+                  if (city) formattedAddress += `, ${city}`;
+                } else {
+                  formattedAddress = data.display_name;
+                }
+                
+                setValue('deliveryAddress', formattedAddress, { shouldValidate: true });
+                setLocationStatus('📍 Ubicación aproximada y dirección obtenidas.');
+              } else {
+                setLocationStatus('📍 Ubicación aproximada obtenida.');
+              }
+            })
+            .catch(err => {
+              console.error(err);
+              setLocationStatus('📍 Ubicación aproximada obtenida.');
+            });
+        },
+        (fallbackErr) => {
+          console.error('Fallback geolocation error:', fallbackErr);
+          setLocationStatus('No se pudo acceder a tu ubicación. Por favor, escribe tu dirección detallada.');
+        },
+        { enableHighAccuracy: false, timeout: 8000 }
+      );
+    };
+
+    navigator.geolocation.getCurrentPosition(success, error, { enableHighAccuracy: true, timeout: 10000 });
   };
 
   const onSubmit = async (data) => {
@@ -75,45 +155,7 @@ export default function FinalizarPedido() {
       const response = await api.post('/orders', payload);
       const createdOrder = response.data.data.order;
 
-      const PHONE_NUMBER = '5492984596403';
-      const paymentMethodNames = {
-        cash: 'Efectivo al recibir',
-        transfer: 'Transferencia bancaria previa'
-      };
-
-      let message = `🍻 *PEDIDO DE BEBIDAS - BEBIDAS GONZI* 🍻\n`;
-      message += `==========================================\n`;
-      message += `👤 *Cliente:* ${createdOrder.customerName}\n`;
-      message += `📍 *Dirección:* ${createdOrder.deliveryAddress}\n`;
-      message += `💳 *Pago:* ${paymentMethodNames[createdOrder.paymentMethod]}\n`;
-      if (createdOrder.paymentMethod === 'transfer') {
-        message += `🔑 *Alias:* BebidasGonzi\n`;
-      }
-      message += `\n`;
-
-      message += `🛒 *Detalle del Pedido:*\n`;
-      createdOrder.items.forEach(item => {
-        message += `• ${item.quantity}x ${item.name} ($${item.price.toLocaleString('es-AR')} c/u) - Subtotal: $${item.subtotal.toLocaleString('es-AR')}\n`;
-      });
-
-      message += `\n💰 *Total a pagar:* $${createdOrder.totalAmount.toLocaleString('es-AR')}\n`;
-
-      if (createdOrder.lat && createdOrder.lng) {
-        message += `\n📍 *Ubicación en tiempo real:* https://maps.google.com/?q=${createdOrder.lat},${createdOrder.lng}\n`;
-      } else {
-        message += `\n📍 *Mapa de dirección:* https://maps.google.com/?q=${encodeURIComponent(createdOrder.deliveryAddress)}\n`;
-      }
-
-      message += `==========================================\n`;
-      message += `¡Favor de preparar el pedido helado! ❄️`;
-
-      const encodedMessage = encodeURIComponent(message);
-      const whatsappUrl = `https://wa.me/${PHONE_NUMBER}?text=${encodedMessage}`;
-
       clearCart();
-
-      window.open(whatsappUrl, '_blank');
-
       navigate(`/order-success/${createdOrder.id}`);
     } catch (err) {
       console.error(err);
