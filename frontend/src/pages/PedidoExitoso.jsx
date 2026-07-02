@@ -62,8 +62,7 @@ export default function PedidoExitoso() {
       message += `\n📍 *Mapa de dirección:* https://maps.google.com/?q=${encodeURIComponent(orderData.deliveryAddress)}\n`;
     }
 
-    message += `==========================================\n`;
-    message += `¡Favor de preparar el pedido helado! ❄️`;
+    message += `==========================================`;
 
     const encodedMessage = encodeURIComponent(message);
     return `https://wa.me/${PHONE_NUMBER}?text=${encodedMessage}`;
