@@ -13,7 +13,7 @@ export default function FinalizarPedido() {
   const [coords, setCoords] = useState({ lat: null, lng: null });
   const [hasItemsOnMount] = useState(cartItems.length > 0);
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm({
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
     defaultValues: {
       customerName: '',
       deliveryAddress: '',
@@ -21,6 +21,7 @@ export default function FinalizarPedido() {
       notes: ''
     }
   });
+  const paymentMethod = watch('paymentMethod');
 
   useEffect(() => {
     if (!hasItemsOnMount) {
@@ -248,6 +249,29 @@ export default function FinalizarPedido() {
                 <option value="transfer" style={{ background: '#ffffff', color: 'var(--text-primary)' }}>Transferencia bancaria</option>
               </select>
             </div>
+
+            {paymentMethod === 'transfer' && (
+              <div style={{
+                background: 'rgba(197, 160, 89, 0.08)',
+                border: '1px solid rgba(197, 160, 89, 0.25)',
+                borderRadius: '12px',
+                padding: '1.25rem',
+                marginBottom: '1.5rem',
+                fontSize: '0.9rem',
+                textAlign: 'left'
+              }}>
+                <div style={{ fontWeight: 700, color: 'var(--accent)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <span>🔑</span> Datos de Transferencia:
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginBottom: '0.5rem' }}>
+                  <div><strong>Mercado Pago (Alias):</strong> <span style={{ fontFamily: 'monospace', fontWeight: 700 }}>Bebidasgonzi</span></div>
+                  <div><strong>Banco (Alias):</strong> <span style={{ fontFamily: 'monospace', fontWeight: 700 }}>Boldo.aceite.sepia</span></div>
+                </div>
+                <div style={{ color: 'var(--danger)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.3rem', borderTop: '1px dashed rgba(197, 160, 89, 0.3)', paddingTop: '0.5rem', marginTop: '0.5rem' }}>
+                  <span>⚠️</span> Enviar comprobante para poder recibir el pedido
+                </div>
+              </div>
+            )}
 
             <div className="form-group" style={{ marginBottom: '2rem' }}>
               <label className="form-label">Notas / Instrucciones adicionales (Opcional)</label>

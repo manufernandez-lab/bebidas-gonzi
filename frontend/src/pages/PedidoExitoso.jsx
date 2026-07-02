@@ -42,7 +42,9 @@ export default function PedidoExitoso() {
     message += `📍 *Dirección:* ${orderData.deliveryAddress}\n`;
     message += `💳 *Pago:* ${paymentMethodNames[orderData.paymentMethod] || orderData.paymentMethod}\n`;
     if (orderData.paymentMethod === 'transfer') {
-      message += `🔑 *Alias:* BebidasGonzi\n`;
+      message += `🔑 *Alias Mercado Pago:* Bebidasgonzi\n`;
+      message += `🔑 *Alias Banco:* Boldo.aceite.sepia\n`;
+      message += `⚠️ *Enviar comprobante para poder recibir el pedido*\n`;
     }
     if (orderData.notes) {
       message += `📝 *Nota:* ${orderData.notes}\n`;
@@ -179,9 +181,40 @@ export default function PedidoExitoso() {
             <strong>Método de pago:</strong> <span style={{ color: 'var(--text-primary)' }}>{paymentMethods[order.paymentMethod]}</span>
           </p>
           {order.paymentMethod === 'transfer' && (
-            <p style={{ fontSize: '0.9rem', marginBottom: '0.4rem', color: 'var(--text-secondary)' }}>
-              <strong>Alias para Transferencia:</strong> <span style={{ color: 'var(--accent)', fontWeight: 700 }}>BebidasGonzi</span>
-            </p>
+            <div style={{
+              background: 'rgba(197, 160, 89, 0.08)',
+              border: '1px solid rgba(197, 160, 89, 0.3)',
+              borderRadius: '12px',
+              padding: '1.25rem',
+              marginTop: '1.25rem',
+              marginBottom: '1.25rem',
+              textAlign: 'left'
+            }}>
+              <h4 style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--accent)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <span>🔑</span> Datos para la Transferencia:
+              </h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
+                <p style={{ fontSize: '0.9rem', margin: 0, color: 'var(--text-secondary)' }}>
+                  <strong>Mercado Pago (Alias):</strong> <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontFamily: 'monospace', background: 'rgba(0,0,0,0.03)', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>Bebidasgonzi</span>
+                </p>
+                <p style={{ fontSize: '0.9rem', margin: 0, color: 'var(--text-secondary)' }}>
+                  <strong>Banco (Alias):</strong> <span style={{ color: 'var(--text-primary)', fontWeight: 700, fontFamily: 'monospace', background: 'rgba(0,0,0,0.03)', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>Boldo.aceite.sepia</span>
+                </p>
+              </div>
+              <div style={{
+                marginTop: '1rem',
+                paddingTop: '0.75rem',
+                borderTop: '1px dashed rgba(197, 160, 89, 0.3)',
+                color: 'var(--danger)',
+                fontSize: '0.9rem',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem'
+              }}>
+                <span>⚠️</span> Enviar comprobante para poder recibir el pedido
+              </div>
+            </div>
           )}
           <p style={{ fontSize: '0.9rem', marginBottom: '0.4rem', color: 'var(--text-secondary)' }}>
             <strong>Fecha:</strong> <span style={{ color: 'var(--text-primary)' }}>{new Date(order.createdAt).toLocaleString('es-AR')}</span>
