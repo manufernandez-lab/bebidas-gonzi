@@ -17,7 +17,8 @@ export default function FinalizarPedido() {
     defaultValues: {
       customerName: '',
       deliveryAddress: '',
-      paymentMethod: 'cash'
+      paymentMethod: 'cash',
+      notes: ''
     }
   });
 
@@ -143,6 +144,7 @@ export default function FinalizarPedido() {
         customerName: data.customerName,
         deliveryAddress: data.deliveryAddress,
         paymentMethod: data.paymentMethod,
+        notes: data.notes || undefined,
         lat: coords.lat ? Number(coords.lat) : undefined,
         lng: coords.lng ? Number(coords.lng) : undefined,
         items: cartItems.map(item => ({
@@ -235,7 +237,7 @@ export default function FinalizarPedido() {
               )}
             </div>
 
-            <div className="form-group" style={{ marginBottom: '2rem' }}>
+            <div className="form-group" style={{ marginBottom: '1.5rem' }}>
               <label className="form-label">Método de Pago</label>
               <select
                 className="form-input"
@@ -245,6 +247,17 @@ export default function FinalizarPedido() {
                 <option value="cash" style={{ background: '#ffffff', color: 'var(--text-primary)' }}>Efectivo al recibir</option>
                 <option value="transfer" style={{ background: '#ffffff', color: 'var(--text-primary)' }}>Transferencia bancaria</option>
               </select>
+            </div>
+
+            <div className="form-group" style={{ marginBottom: '2rem' }}>
+              <label className="form-label">Notas / Instrucciones adicionales (Opcional)</label>
+              <textarea
+                className="form-input"
+                placeholder="Ej: Timbre roto, llamar al llegar. Para el pack de cervezas: 2 IPA y 1 APA."
+                rows="3"
+                style={{ resize: 'vertical', minHeight: '80px', height: 'auto', background: '#ffffff', color: 'var(--text-primary)' }}
+                {...register('notes')}
+              />
             </div>
 
             <button

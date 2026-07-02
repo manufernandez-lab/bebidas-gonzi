@@ -44,6 +44,9 @@ export default function PedidoExitoso() {
     if (orderData.paymentMethod === 'transfer') {
       message += `🔑 *Alias:* BebidasGonzi\n`;
     }
+    if (orderData.notes) {
+      message += `📝 *Nota:* ${orderData.notes}\n`;
+    }
     message += `\n`;
 
     message += `🛒 *Detalle del Pedido:*\n`;

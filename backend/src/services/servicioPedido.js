@@ -73,6 +73,7 @@ export const servicioPedido = {
       customerName: orderData.customerName,
       customerPhone: orderData.customerPhone,
       deliveryAddress: orderData.deliveryAddress,
+      notes: orderData.notes,
       lat: orderData.lat,
       lng: orderData.lng,
       paymentMethod: orderData.paymentMethod,

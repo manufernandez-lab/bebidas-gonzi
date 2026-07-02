@@ -56,7 +56,29 @@ export default function Catalogo() {
           Tus bebidas, <span className="text-gradient">listas para disfrutar</span>
         </h1>
         <p style={{ color: 'var(--text-secondary)', fontSize: '1.05rem', maxWidth: '600px', margin: '0 auto' }}>
-          Catálogo exclusivo con envío rápido y directo a tu ubicación. Arma tu pedido y recíbelo helado.
+          Enterate de novedades y nuevas promos en nuestro{' '}
+          <a
+            href="https://www.instagram.com/deliverydebebidas_gonzi/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: 'var(--accent)',
+              fontWeight: 700,
+              textDecoration: 'none',
+              borderBottom: '2px solid transparent',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.borderBottomColor = 'var(--accent)';
+              e.currentTarget.style.opacity = '0.85';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.borderBottomColor = 'transparent';
+              e.currentTarget.style.opacity = '1';
+            }}
+          >
+            Instagram 📸
+          </a>
         </p>
       </header>
 
@@ -144,15 +166,19 @@ export default function Catalogo() {
           {products.map((product) => {
             const isSmirnoff = product.name.toLowerCase().includes('smirnoff');
             const isSky = product.name.toLowerCase().includes('sky');
-            const hasFlavors = isSmirnoff || isSky;
+            const isPolitburo = product.name.toLowerCase().includes('politburo');
+            const isPolitburoPack = isPolitburo && (product.name.toLowerCase().includes('3 unidades') || product.name.toLowerCase().includes('6 unidades'));
+            const hasFlavors = isSmirnoff || isSky || isPolitburo;
 
-            const defaultFlavor = isSmirnoff ? 'Clasico' : (isSky ? 'Cosmic' : null);
+            const defaultFlavor = isSmirnoff 
+              ? 'Clasico' 
+              : (isSky ? 'Cosmic' : (isPolitburo ? (isPolitburoPack ? 'Variado / Combinado' : 'Ipa') : null));
             const selectedFlavor = hasFlavors ? (selectedFlavors[product.id] || defaultFlavor) : null;
             const inCartQty = getCartQty(product.id, selectedFlavor);
 
             const flavorOptions = isSmirnoff 
               ? ['Clasico', 'Frutos Rojos', 'Manzana'] 
-              : (isSky ? ['Cosmic', 'Raspberry'] : []);
+              : (isSky ? ['Cosmic', 'Raspberry'] : (isPolitburo ? (isPolitburoPack ? ['Variado / Combinado', 'Ipa', 'Apa', 'Session Ipa'] : ['Ipa', 'Apa', 'Session Ipa']) : []));
 
             return (
               <div 

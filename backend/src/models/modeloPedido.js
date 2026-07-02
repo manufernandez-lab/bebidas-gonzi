@@ -10,6 +10,7 @@ export const crearPedidoSchema = z.object({
   customerName: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
   customerPhone: z.string().optional(),
   deliveryAddress: z.string().min(5, 'La dirección debe tener al menos 5 caracteres'),
+  notes: z.string().optional(),
   lat: z.number().optional(),
   lng: z.number().optional(),
   paymentMethod: z.enum(['cash', 'transfer'], {

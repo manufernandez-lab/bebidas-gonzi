@@ -17,6 +17,26 @@ export default function PiePagina() {
         <p style={{ fontSize: '0.75rem', marginTop: '0.25rem', opacity: 0.6 }}>
           Arquitectura Limpia &bull; Carga Instantánea &bull; Envío por WhatsApp
         </p>
+        <p style={{ fontSize: '0.8rem', marginTop: '0.75rem', color: 'var(--text-secondary)' }}>
+          Creado por <strong style={{ color: 'var(--text-primary)' }}>Manuel Fernandez Parente</strong> &bull;{' '}
+          <a
+            href="https://wa.me/5492984948285"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}
+          >
+            Contacto 📱
+          </a>{' '}
+          &bull;{' '}
+          <a
+            href="https://www.instagram.com/manu_fernandezp/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}
+          >
+            Instagram 📸
+          </a>
+        </p>
         <div style={{ marginTop: '1rem' }}>
           <Link 
             to="/admin" 

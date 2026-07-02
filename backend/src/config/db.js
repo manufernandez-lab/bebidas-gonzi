@@ -33,6 +33,7 @@ const orderSchema = new mongoose.Schema({
   customerName: String,
   customerPhone: String,
   deliveryAddress: String,
+  notes: String,
   lat: Number,
   lng: Number,
   paymentMethod: String,
