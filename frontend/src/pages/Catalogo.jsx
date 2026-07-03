@@ -30,7 +30,8 @@ export default function Catalogo() {
       if (searchQuery) params.search = searchQuery;
 
       const response = await api.get('/products', { params });
-      setProducts(response.data.data.products);
+      const availableProducts = response.data.data.products.filter(p => p.isAvailable !== false);
+      setProducts(availableProducts);
       setError(null);
     } catch (err) {
       console.error(err);
@@ -178,7 +179,7 @@ export default function Catalogo() {
 
             const flavorOptions = isSmirnoff 
               ? ['Clasico', 'Frutos Rojos', 'Manzana'] 
-              : (isSky ? ['Cosmic', 'Raspberry'] : (isPolitburo ? (isPolitburoPack ? ['Variado / Combinado', 'Ipa', 'Apa', 'Session Ipa'] : ['Ipa', 'Apa', 'Session Ipa']) : []));
+              : (isSky ? ['Cosmic', 'Raspberry', 'Clasico', 'Anana'] : (isPolitburo ? (isPolitburoPack ? ['Variado / Combinado', 'Ipa', 'Apa', 'Session Ipa'] : ['Ipa', 'Apa', 'Session Ipa']) : []));
 
             return (
               <div 
@@ -247,7 +248,7 @@ export default function Catalogo() {
                       >
                         {flavorOptions.map(option => (
                           <option key={option} value={option}>
-                            {option === 'Clasico' ? 'Clásico' : option}
+                            {option === 'Clasico' ? 'Clásico' : (option === 'Anana' ? 'Ananá' : option)}
                           </option>
                         ))}
                       </select>

@@ -398,6 +398,22 @@ export default function Admin() {
                       <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-primary)' }}>
                         ${product.price.toLocaleString('es-AR')}
                       </span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.25rem' }}>
+                        <span style={{
+                          display: 'inline-block',
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          background: product.isAvailable !== false ? '#2E7D32' : '#C62828'
+                        }}></span>
+                        <span style={{
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          color: product.isAvailable !== false ? '#2E7D32' : '#C62828'
+                        }}>
+                          {product.isAvailable !== false ? 'Disponible' : 'No disponible'}
+                        </span>
+                      </div>
                     </div>
                   </div>
 
@@ -562,6 +578,34 @@ export default function Admin() {
                     />
                   </div>
                 )}
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem' }}>
+                <input
+                  type="checkbox"
+                  id="isAvailable"
+                  name="isAvailable"
+                  checked={formData.isAvailable}
+                  onChange={(e) => setFormData(prev => ({ ...prev, isAvailable: e.target.checked }))}
+                  style={{
+                    width: '18px',
+                    height: '18px',
+                    cursor: 'pointer',
+                    accentColor: 'var(--accent)'
+                  }}
+                />
+                <label 
+                  htmlFor="isAvailable" 
+                  style={{ 
+                    fontSize: '0.9rem', 
+                    fontWeight: 700, 
+                    color: 'var(--text-primary)',
+                    cursor: 'pointer',
+                    userSelect: 'none'
+                  }}
+                >
+                  Producto Disponible (se muestra en el catálogo)
+                </label>
               </div>
 
               <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
