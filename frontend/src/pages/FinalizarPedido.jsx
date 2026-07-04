@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/ContextoCarrito.jsx';
+import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 import api from '../services/clienteApi';
 
 export default function FinalizarPedido() {
@@ -23,13 +24,21 @@ export default function FinalizarPedido() {
   });
   const paymentMethod = watch('paymentMethod');
 
+  const { isOpen, loading: configLoading } = useStoreConfig();
+
   useEffect(() => {
     if (!hasItemsOnMount) {
       navigate('/', { replace: true });
     }
   }, [hasItemsOnMount, navigate]);
 
-  if (!hasItemsOnMount) {
+  useEffect(() => {
+    if (!configLoading && !isOpen) {
+      navigate('/', { replace: true });
+    }
+  }, [isOpen, configLoading, navigate]);
+
+  if (!hasItemsOnMount || (!configLoading && !isOpen)) {
     return null;
   }
 

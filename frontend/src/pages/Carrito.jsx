@@ -1,10 +1,12 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/ContextoCarrito.jsx';
+import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 
 export default function Carrito() {
   const { cartItems, cartTotal, updateQuantity, removeFromCart, clearCart } = useCart();
   const navigate = useNavigate();
+  const { isOpen } = useStoreConfig();
 
   if (cartItems.length === 0) {
     return (
@@ -153,10 +155,40 @@ export default function Carrito() {
               </span>
             </div>
 
+            {!isOpen && (
+              <div style={{
+                background: 'rgba(198, 40, 40, 0.05)',
+                border: '1px solid rgba(198, 40, 40, 0.12)',
+                borderRadius: '12px',
+                padding: '0.75rem 1rem',
+                fontSize: '0.82rem',
+                color: '#C62828',
+                lineHeight: '1.4',
+                textAlign: 'center'
+              }}>
+                <strong>El local está cerrado.</strong> No se pueden realizar pedidos en este momento. Consultá los horarios en la barra superior.
+              </div>
+            )}
+
             <button 
               onClick={() => navigate('/checkout')}
               className="btn btn-primary"
-              style={{ width: '100%', padding: '0.85rem', fontSize: '1rem', marginTop: '0.5rem', borderRadius: '10px' }}
+              disabled={!isOpen}
+              style={{ 
+                width: '100%', 
+                padding: '0.85rem', 
+                fontSize: '1rem', 
+                marginTop: '0.5rem', 
+                borderRadius: '10px',
+                ...(!isOpen ? {
+                  opacity: 0.5,
+                  cursor: 'not-allowed',
+                  background: '#a0a0a0',
+                  borderColor: '#a0a0a0',
+                  boxShadow: 'none',
+                  pointerEvents: 'none'
+                } : {})
+              }}
             >
               Confirmar Pedido
             </button>

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useCart } from '../context/ContextoCarrito.jsx';
+import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 
 export default function BarraNavegacion() {
   const { cartCount } = useCart();
   const location = useLocation();
+  const { isOpen, config } = useStoreConfig();
+  const [showHours, setShowHours] = useState(false);
 
   return (
     <nav className="glass-panel" style={{
@@ -13,20 +16,25 @@ export default function BarraNavegacion() {
       margin: '1rem auto',
       zIndex: 100,
       display: 'flex',
-      justifyContent: 'space-between',
+      flexDirection: 'column',
       alignItems: 'center',
-      padding: '0.75rem 2rem',
+      gap: '0.75rem',
+      padding: '1rem 2rem',
       maxWidth: '1200px',
       width: 'calc(100% - 2rem)',
-      borderRadius: '9999px',
+      borderRadius: '24px',
     }}>
       <Link to="/" style={{
         display: 'flex',
         alignItems: 'center',
+        justifyContent: 'center',
         gap: '0.75rem',
         textDecoration: 'none',
         color: 'var(--text-primary)',
-        transition: 'var(--transition)'
+        transition: 'var(--transition)',
+        width: '100%',
+        borderBottom: '1px solid var(--glass-border)',
+        paddingBottom: '0.75rem'
       }}>
         <svg viewBox="0 0 120 120" width="52" height="52" style={{ flexShrink: 0 }}>
           {/* Concentric Circles */}
@@ -72,7 +80,94 @@ export default function BarraNavegacion() {
         </div>
       </Link>
 
-      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
+      <div style={{ 
+        display: 'flex', 
+        gap: '1.5rem', 
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        flexWrap: 'wrap'
+      }}>
+        {/* Horarios Dropdown */}
+        <div style={{ position: 'relative' }}>
+          <button 
+            onClick={() => setShowHours(!showHours)}
+            onMouseEnter={() => setShowHours(true)}
+            onMouseLeave={() => setShowHours(false)}
+            style={{
+              background: isOpen ? 'rgba(46, 125, 50, 0.08)' : 'rgba(198, 40, 40, 0.08)',
+              color: isOpen ? '#2E7D32' : '#C62828',
+              border: `1px solid ${isOpen ? 'rgba(46, 125, 50, 0.2)' : 'rgba(198, 40, 40, 0.2)'}`,
+              padding: '0.4rem 0.9rem',
+              borderRadius: '9999px',
+              fontSize: '0.85rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              transition: 'var(--transition)',
+              outline: 'none'
+            }}
+          >
+            <span style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              background: isOpen ? '#2E7D32' : '#C62828',
+              display: 'inline-block',
+              boxShadow: `0 0 8px ${isOpen ? '#2E7D32' : '#C62828'}`
+            }}></span>
+            {isOpen ? 'Abierto' : 'Cerrado'}
+          </button>
+          
+          {showHours && config && config.schedule && (
+            <div 
+              onMouseEnter={() => setShowHours(true)}
+              onMouseLeave={() => setShowHours(false)}
+              style={{
+                position: 'absolute',
+                top: '100%',
+                right: '50%',
+                transform: 'translateX(50%)',
+                marginTop: '0.75rem',
+                background: '#ffffff',
+                border: '1px solid var(--glass-border)',
+                borderRadius: '16px',
+                padding: '1rem',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+                zIndex: 150,
+                width: '260px',
+                animation: 'fadeIn 0.2s ease'
+              }}
+            >
+              <h4 style={{ margin: '0 0 0.75rem', fontSize: '0.9rem', fontWeight: 800, fontFamily: 'var(--font-serif)', color: 'var(--text-primary)', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem', textAlign: 'center' }}>
+                Horarios de Atención
+              </h4>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                {config.schedule.map((s) => {
+                  const todayIndex = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' })).getDay();
+                  const isToday = s.dayIndex === todayIndex;
+                  return (
+                    <div key={s.dayIndex} style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      fontSize: '0.8rem',
+                      fontWeight: isToday ? 800 : 500,
+                      color: isToday ? 'var(--accent)' : 'var(--text-secondary)'
+                    }}>
+                      <span>{s.dayName}</span>
+                      <span>
+                        {s.isOpen ? `${s.openTime} a ${s.closeTime} hs` : 'Cerrado'}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
         <Link 
           to="/" 
           style={{

@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 import { servicioProducto } from './servicioProducto.js';
+import { servicioConfig } from './servicioConfig.js';
 import { ErrorAplicacion } from '../utils/errorAplicacion.js';
 import { isMongoConnected, OrderModel } from '../config/db.js';
 
@@ -44,6 +45,11 @@ export const servicioPedido = {
   },
 
   async create(orderData) {
+    const config = await servicioConfig.getConfig();
+    if (!config.isOpen) {
+      throw new ErrorAplicacion('El local se encuentra cerrado actualmente. No se pueden realizar pedidos en este momento.', 400);
+    }
+
     const products = await servicioProducto.getAll();
     const orderItems = [];
     let totalAmount = 0;

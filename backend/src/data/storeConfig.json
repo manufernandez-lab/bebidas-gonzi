@@ -1,0 +1,55 @@
+{
+  "key": "main",
+  "isOpenOverride": null,
+  "schedule": [
+    {
+      "dayIndex": 0,
+      "dayName": "Domingo",
+      "isOpen": true,
+      "openTime": "20:00",
+      "closeTime": "02:00"
+    },
+    {
+      "dayIndex": 1,
+      "dayName": "Lunes",
+      "isOpen": true,
+      "openTime": "20:00",
+      "closeTime": "02:00"
+    },
+    {
+      "dayIndex": 2,
+      "dayName": "Martes",
+      "isOpen": true,
+      "openTime": "20:00",
+      "closeTime": "02:00"
+    },
+    {
+      "dayIndex": 3,
+      "dayName": "Miércoles",
+      "isOpen": true,
+      "openTime": "20:00",
+      "closeTime": "02:00"
+    },
+    {
+      "dayIndex": 4,
+      "dayName": "Jueves",
+      "isOpen": true,
+      "openTime": "20:00",
+      "closeTime": "02:00"
+    },
+    {
+      "dayIndex": 5,
+      "dayName": "Viernes",
+      "isOpen": true,
+      "openTime": "20:00",
+      "closeTime": "04:00"
+    },
+    {
+      "dayIndex": 6,
+      "dayName": "Sábado",
+      "isOpen": true,
+      "openTime": "20:00",
+      "closeTime": "04:00"
+    }
+  ]
+}

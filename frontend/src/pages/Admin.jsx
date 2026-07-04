@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/clienteApi';
+import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 
 export default function Admin() {
+  const { refreshConfig } = useStoreConfig();
+
   // Authentication states
   const [isAuthenticated, setIsAuthenticated] = useState(
     sessionStorage.getItem('admin_auth') === 'true'
   );
   const [passwordInput, setPasswordInput] = useState('');
   const [authError, setAuthError] = useState('');
+
+  // Active tab state
+  const [activeTab, setActiveTab] = useState('products'); // 'products' or 'schedule'
 
   // Data states
   const [products, setProducts] = useState([]);
@@ -25,6 +31,13 @@ export default function Admin() {
     imageUrl: '',
     isAvailable: true
   });
+
+  // Schedule config states
+  const [scheduleConfig, setScheduleConfig] = useState(null);
+  const [overrideStatus, setOverrideStatus] = useState('auto'); // 'auto', 'open', 'closed'
+  const [configLoading, setConfigLoading] = useState(false);
+  const [configError, setConfigError] = useState('');
+  const [configSuccess, setConfigSuccess] = useState('');
 
   const categories = [
     'Promos',
@@ -53,11 +66,79 @@ export default function Admin() {
     setLoading(false);
   };
 
+  const fetchConfig = async () => {
+    try {
+      setConfigLoading(true);
+      setConfigError('');
+      const response = await api.get('/config');
+      const conf = response.data.data.config;
+      setScheduleConfig(conf);
+      if (conf.isOpenOverride === true) setOverrideStatus('open');
+      else if (conf.isOpenOverride === false) setOverrideStatus('closed');
+      else setOverrideStatus('auto');
+    } catch (err) {
+      console.error(err);
+      setConfigError('Error al cargar la configuración de horarios');
+    } finally {
+      setConfigLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       loadData();
+      fetchConfig();
     }
   }, [isAuthenticated]);
+
+  const handleDayChange = (dayIndex, field, value) => {
+    setScheduleConfig(prev => {
+      if (!prev) return null;
+      const updatedSchedule = prev.schedule.map(d => {
+        if (d.dayIndex === dayIndex) {
+          return { ...d, [field]: value };
+        }
+        return d;
+      });
+      return { ...prev, schedule: updatedSchedule };
+    });
+  };
+
+  const handleSaveConfig = async () => {
+    try {
+      setConfigError('');
+      setConfigSuccess('');
+      
+      let isOpenOverride = null;
+      if (overrideStatus === 'open') isOpenOverride = true;
+      if (overrideStatus === 'closed') isOpenOverride = false;
+
+      // Validate times before sending
+      const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
+      for (const d of scheduleConfig.schedule) {
+        if (d.isOpen) {
+          if (!timeRegex.test(d.openTime) || !timeRegex.test(d.closeTime)) {
+            setConfigError(`Formato de hora inválido en ${d.dayName} (debe ser HH:MM, ej. 20:00)`);
+            return;
+          }
+        }
+      }
+
+      const payload = {
+        isOpenOverride,
+        schedule: scheduleConfig.schedule
+      };
+
+      const response = await api.put('/config', payload);
+      setScheduleConfig(response.data.data.config);
+      refreshConfig(); // Update global context immediately
+      setConfigSuccess('Horarios actualizados con éxito');
+      setTimeout(() => setConfigSuccess(''), 4000);
+    } catch (err) {
+      console.error(err);
+      setConfigError('Error al guardar la configuración');
+    }
+  };
 
   const showNotification = (msg) => {
     setSuccessMsg(msg);
@@ -332,138 +413,323 @@ export default function Admin() {
         )}
       </header>
 
-      {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', padding: '5rem 0' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            border: '3px solid rgba(0,0,0,0.1)',
-            borderTopColor: 'var(--accent)',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite'
-          }}></div>
-        </div>
-      ) : (
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Listado de Productos</h3>
-            <button onClick={handleOpenCreateModal} className="btn btn-primary" style={{ padding: '0.6rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-              </svg>
-              Agregar Bebida
-            </button>
-          </div>
+      {/* Tabs */}
+      <div style={{
+        display: 'flex',
+        gap: '0.75rem',
+        borderBottom: '1px solid var(--glass-border)',
+        marginBottom: '2.5rem',
+        paddingBottom: '0.5rem'
+      }}>
+        <button
+          onClick={() => setActiveTab('products')}
+          style={{
+            background: 'none',
+            border: 'none',
+            borderBottom: activeTab === 'products' ? '3px solid var(--accent)' : '3px solid transparent',
+            color: activeTab === 'products' ? 'var(--text-primary)' : 'var(--text-secondary)',
+            padding: '0.5rem 1.25rem',
+            fontSize: '1rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            transition: 'var(--transition)'
+          }}
+        >
+          Gestionar Productos
+        </button>
+        <button
+          onClick={() => setActiveTab('schedule')}
+          style={{
+            background: 'none',
+            border: 'none',
+            borderBottom: activeTab === 'schedule' ? '3px solid var(--accent)' : '3px solid transparent',
+            color: activeTab === 'schedule' ? 'var(--text-primary)' : 'var(--text-secondary)',
+            padding: '0.5rem 1.25rem',
+            fontSize: '1rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            transition: 'var(--transition)'
+          }}
+        >
+          Horarios de Atención
+        </button>
+      </div>
 
-          {products.length === 0 ? (
-            <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
-              No hay productos registrados. Carga uno nuevo usando el botón de arriba.
+      {activeTab === 'products' && (
+        loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '5rem 0' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              border: '3px solid rgba(0,0,0,0.1)',
+              borderTopColor: 'var(--accent)',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+          </div>
+        ) : (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 800 }}>Listado de Productos</h3>
+              <button onClick={handleOpenCreateModal} className="btn btn-primary" style={{ padding: '0.6rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                Agregar Bebida
+              </button>
             </div>
-          ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-              {products.map(product => (
-                <div key={product.id} className="glass-panel animate-scale-up" style={{
-                  padding: '1.25rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem',
-                  position: 'relative',
-                  border: '1px solid var(--glass-border)'
-                }}>
-                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      style={{
-                        width: '70px',
-                        height: '70px',
-                        objectFit: 'cover',
-                        borderRadius: '12px',
-                        border: '1px solid var(--glass-border)'
-                      }}
-                    />
-                    <div>
-                      <span style={{
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        color: 'var(--accent-gold)',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px'
-                      }}>
-                        {product.category}
-                      </span>
-                      <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '2px 0 4px', color: 'var(--text-primary)' }}>
-                        {product.name}
-                      </h4>
-                      <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                        ${product.price.toLocaleString('es-AR')}
-                      </span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.25rem' }}>
-                        <span style={{
-                          display: 'inline-block',
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          background: product.isAvailable !== false ? '#2E7D32' : '#C62828'
-                        }}></span>
+
+            {products.length === 0 ? (
+              <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                No hay productos registrados. Carga uno nuevo usando el botón de arriba.
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                {products.map(product => (
+                  <div key={product.id} className="glass-panel animate-scale-up" style={{
+                    padding: '1.25rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1rem',
+                    position: 'relative',
+                    border: '1px solid var(--glass-border)'
+                  }}>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        style={{
+                          width: '70px',
+                          height: '70px',
+                          objectFit: 'cover',
+                          borderRadius: '12px',
+                          border: '1px solid var(--glass-border)'
+                        }}
+                      />
+                      <div>
                         <span style={{
                           fontSize: '0.75rem',
-                          fontWeight: 600,
-                          color: product.isAvailable !== false ? '#2E7D32' : '#C62828'
+                          fontWeight: 700,
+                          color: 'var(--accent-gold)',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5px'
                         }}>
-                          {product.isAvailable !== false ? 'Disponible' : 'No disponible'}
+                          {product.category}
                         </span>
+                        <h4 style={{ fontSize: '1.05rem', fontWeight: 800, margin: '2px 0 4px', color: 'var(--text-primary)' }}>
+                          {product.name}
+                        </h4>
+                        <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                          ${product.price.toLocaleString('es-AR')}
+                        </span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginTop: '0.25rem' }}>
+                          <span style={{
+                            display: 'inline-block',
+                            width: '8px',
+                            height: '8px',
+                            borderRadius: '50%',
+                            background: product.isAvailable !== false ? '#2E7D32' : '#C62828'
+                          }}></span>
+                          <span style={{
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            color: product.isAvailable !== false ? '#2E7D32' : '#C62828'
+                          }}>
+                            {product.isAvailable !== false ? 'Disponible' : 'No disponible'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      alignItems: 'center',
+                      borderTop: '1px solid var(--glass-border)',
+                      paddingTop: '0.75rem',
+                      marginTop: 'auto'
+                    }}>
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button
+                          onClick={() => handleOpenEditModal(product)}
+                          className="btn"
+                          style={{
+                            padding: '0.4rem 0.8rem',
+                            fontSize: '0.8rem',
+                            borderRadius: '8px',
+                            border: '1px solid var(--glass-border)',
+                            background: '#ffffff',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            color: 'var(--text-primary)'
+                          }}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => handleDeleteProduct(product.id)}
+                          className="btn"
+                          style={{
+                            padding: '0.4rem 0.8rem',
+                            fontSize: '0.8rem',
+                            borderRadius: '8px',
+                            border: '1px solid #FFCDD2',
+                            background: '#FFEBEE',
+                            color: '#C62828',
+                            fontWeight: 600,
+                            cursor: 'pointer'
+                          }}
+                        >
+                          Eliminar
+                        </button>
                       </div>
                     </div>
                   </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )
+      )}
 
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center',
-                    borderTop: '1px solid var(--glass-border)',
-                    paddingTop: '0.75rem',
-                    marginTop: 'auto'
-                  }}>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button
-                        onClick={() => handleOpenEditModal(product)}
-                        className="btn"
-                        style={{
-                          padding: '0.4rem 0.8rem',
-                          fontSize: '0.8rem',
-                          borderRadius: '8px',
-                          border: '1px solid var(--glass-border)',
-                          background: '#ffffff',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          color: 'var(--text-primary)'
-                        }}
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => handleDeleteProduct(product.id)}
-                        className="btn"
-                        style={{
-                          padding: '0.4rem 0.8rem',
-                          fontSize: '0.8rem',
-                          borderRadius: '8px',
-                          border: '1px solid #FFCDD2',
-                          background: '#FFEBEE',
-                          color: '#C62828',
-                          fontWeight: 600,
-                          cursor: 'pointer'
-                        }}
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+      {activeTab === 'schedule' && (
+        <div>
+          {/* Override Section */}
+          <div className="glass-panel" style={{ padding: '2rem', marginBottom: '2rem', border: '1px solid var(--glass-border)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              Estado de Apertura (Override Manual)
+            </h3>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: '1.4' }}>
+              Permite anular temporalmente el horario programado para forzar la tienda a estar abierta o cerrada de manera inmediata.
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              {[
+                { id: 'auto', label: 'Horario Automático', color: 'var(--text-primary)' },
+                { id: 'open', label: 'Forzar Abierto 🟢', color: '#2E7D32', bg: 'rgba(46, 125, 50, 0.08)' },
+                { id: 'closed', label: 'Forzar Cerrado 🔴', color: '#C62828', bg: 'rgba(198, 40, 40, 0.08)' }
+              ].map((option) => {
+                const isSelected = overrideStatus === option.id;
+                return (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setOverrideStatus(option.id)}
+                    className="btn"
+                    style={{
+                      padding: '0.75rem 1.5rem',
+                      borderRadius: '12px',
+                      fontSize: '0.9rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      border: isSelected 
+                        ? `2px solid ${option.id === 'open' ? '#2E7D32' : option.id === 'closed' ? '#C62828' : 'var(--accent)'}` 
+                        : '1px solid var(--glass-border)',
+                      background: isSelected 
+                        ? (option.bg || 'rgba(198, 40, 40, 0.04)') 
+                        : '#ffffff',
+                      color: isSelected ? option.color : 'var(--text-secondary)',
+                      transition: 'var(--transition)'
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
             </div>
-          )}
+          </div>
+
+          {/* Schedule Configuration List */}
+          <div className="glass-panel" style={{ padding: '2rem', border: '1px solid var(--glass-border)' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              Horarios Semanales Programados
+            </h3>
+            
+            {configLoading ? (
+              <div style={{ display: 'flex', justifyContent: 'center', padding: '3rem 0' }}>
+                <div style={{ width: '30px', height: '30px', border: '3px solid rgba(0,0,0,0.1)', borderTopColor: 'var(--accent)', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+              </div>
+            ) : scheduleConfig ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {scheduleConfig.schedule.map((day, idx) => (
+                  <div key={day.dayIndex} style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingBottom: '1.25rem',
+                    borderBottom: idx !== 6 ? '1px solid var(--glass-border)' : 'none',
+                    flexWrap: 'wrap',
+                    gap: '1.25rem'
+                  }}>
+                    <div style={{ minWidth: '120px' }}>
+                      <span style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--text-primary)' }}>{day.dayName}</span>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <input
+                        type="checkbox"
+                        id={`day-${day.dayIndex}-active`}
+                        checked={day.isOpen}
+                        onChange={(e) => handleDayChange(day.dayIndex, 'isOpen', e.target.checked)}
+                        style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: 'var(--accent)' }}
+                      />
+                      <label htmlFor={`day-${day.dayIndex}-active`} style={{ fontSize: '0.9rem', fontWeight: 600, cursor: 'pointer', userSelect: 'none' }}>
+                        {day.isOpen ? 'Atiende' : 'Cerrado'}
+                      </label>
+                    </div>
+
+                    {day.isOpen && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div>
+                          <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.25rem' }}>Desde</span>
+                          <input
+                            type="text"
+                            placeholder="20:00"
+                            value={day.openTime}
+                            onChange={(e) => handleDayChange(day.dayIndex, 'openTime', e.target.value)}
+                            className="form-input"
+                            style={{ width: '90px', padding: '0.4rem 0.6rem', textAlign: 'center', fontSize: '0.9rem' }}
+                          />
+                        </div>
+                        <span style={{ marginTop: '1.25rem', fontWeight: 'bold', color: 'var(--text-secondary)' }}>a</span>
+                        <div>
+                          <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.25rem' }}>Hasta</span>
+                          <input
+                            type="text"
+                            placeholder="02:00"
+                            value={day.closeTime}
+                            onChange={(e) => handleDayChange(day.dayIndex, 'closeTime', e.target.value)}
+                            className="form-input"
+                            style={{ width: '90px', padding: '0.4rem 0.6rem', textAlign: 'center', fontSize: '0.9rem' }}
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                  {configSuccess && <span style={{ color: '#2E7D32', fontSize: '0.9rem', fontWeight: 700 }}>✓ {configSuccess}</span>}
+                  {configError && <span style={{ color: '#C62828', fontSize: '0.9rem', fontWeight: 700 }}>✗ {configError}</span>}
+                  <button
+                    type="button"
+                    onClick={handleSaveConfig}
+                    className="btn btn-primary"
+                    style={{ padding: '0.75rem 2rem', borderRadius: '12px', fontWeight: 700 }}
+                  >
+                    Guardar Horarios
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>No se pudo cargar la configuración de los horarios.</p>
+            )}
+          </div>
         </div>
       )}
 

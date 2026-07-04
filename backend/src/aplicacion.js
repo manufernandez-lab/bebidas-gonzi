@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import rutasProducto from './routes/rutasProducto.js';
 import rutasPedido from './routes/rutasPedido.js';
+import rutasConfig from './routes/rutasConfig.js';
 import { manejadorErrores } from './middlewares/manejadorErrores.js';
 import { ErrorAplicacion } from './utils/errorAplicacion.js';
 
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use('/api/products', rutasProducto);
 app.use('/api/orders', rutasPedido);
+app.use('/api/config', rutasConfig);
 
 app.use((req, res, next) => {
   next(new ErrorAplicacion(`No se pudo encontrar la ruta ${req.originalUrl} en este servidor.`, 404));

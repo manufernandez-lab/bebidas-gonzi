@@ -43,8 +43,33 @@ const orderSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+const dayScheduleSchema = new mongoose.Schema({
+  dayIndex: { type: Number, required: true }, // 0 (Sunday) to 6 (Saturday)
+  dayName: { type: String, required: true },  // "Domingo", "Lunes", etc.
+  isOpen: { type: Boolean, default: true },
+  openTime: { type: String, default: '20:00' },
+  closeTime: { type: String, default: '02:00' }
+}, { _id: false });
+
+const storeConfigSchema = new mongoose.Schema({
+  key: { type: String, default: 'main', unique: true },
+  isOpenOverride: { type: Boolean, default: null }, // null = follow schedule, true = force open, false = force closed
+  schedule: [dayScheduleSchema]
+});
+
+const defaultSchedule = [
+  { dayIndex: 0, dayName: 'Domingo', isOpen: true, openTime: '20:00', closeTime: '02:00' },
+  { dayIndex: 1, dayName: 'Lunes', isOpen: true, openTime: '20:00', closeTime: '02:00' },
+  { dayIndex: 2, dayName: 'Martes', isOpen: true, openTime: '20:00', closeTime: '02:00' },
+  { dayIndex: 3, dayName: 'Miércoles', isOpen: true, openTime: '20:00', closeTime: '02:00' },
+  { dayIndex: 4, dayName: 'Jueves', isOpen: true, openTime: '20:00', closeTime: '02:00' },
+  { dayIndex: 5, dayName: 'Viernes', isOpen: true, openTime: '20:00', closeTime: '04:00' },
+  { dayIndex: 6, dayName: 'Sábado', isOpen: true, openTime: '20:00', closeTime: '04:00' }
+];
+
 export const ProductModel = mongoose.model('Product', productSchema);
 export const OrderModel = mongoose.model('Order', orderSchema);
+export const StoreConfigModel = mongoose.model('StoreConfig', storeConfigSchema);
 
 export const connectDB = async () => {
   const uri = process.env.MONGODB_URI;
@@ -85,6 +110,18 @@ export const connectDB = async () => {
         await ProductModel.insertMany(allProducts);
         console.log(`🌱 Seeded ${allProducts.length} products to MongoDB.`);
       }
+    }
+
+    // Seed store config if empty
+    const configCount = await StoreConfigModel.countDocuments();
+    if (configCount === 0) {
+      console.log('🌱 MongoDB store config is empty. Seeding initial schedule.');
+      await StoreConfigModel.create({
+        key: 'main',
+        isOpenOverride: null,
+        schedule: defaultSchedule
+      });
+      console.log('🌱 Seeded default store config to MongoDB.');
     }
   } catch (err) {
     console.error('❌ Failed to connect to MongoDB:', err.message);

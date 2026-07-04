@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/clienteApi';
 import { useCart } from '../context/ContextoCarrito.jsx';
+import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 
 export default function Catalogo() {
   const [products, setProducts] = useState([]);
@@ -50,6 +51,8 @@ export default function Catalogo() {
     return item ? item.quantity : 0;
   };
 
+  const { isOpen } = useStoreConfig();
+
   return (
     <div className="container animate-slide-up" style={{ marginTop: '2rem', minHeight: '80vh' }}>
       <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
@@ -82,6 +85,44 @@ export default function Catalogo() {
           </a>
         </p>
       </header>
+
+      {!isOpen && (
+        <div className="glass-panel" style={{
+          padding: '1.25rem 2rem',
+          marginBottom: '2rem',
+          background: 'rgba(198, 40, 40, 0.05)',
+          border: '1px solid rgba(198, 40, 40, 0.15)',
+          borderRadius: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem',
+          color: '#C62828',
+          boxShadow: '0 8px 32px 0 rgba(198, 40, 40, 0.03)'
+        }}>
+          <div style={{
+            background: 'rgba(198, 40, 40, 0.1)',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <div>
+            <h4 style={{ margin: '0 0 0.15rem 0', fontWeight: 800, fontSize: '1rem' }}>
+              El local se encuentra cerrado actualmente
+            </h4>
+            <p style={{ margin: 0, fontSize: '0.88rem', opacity: 0.9, lineHeight: '1.3' }}>
+              Podés navegar por el catálogo y armar tu carrito de compras de manera normal, pero no vas a poder finalizar el pedido hasta que estemos abiertos. ¡Mirá nuestros horarios en el menú superior!
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="glass-panel" style={{
         padding: '1.5rem',
