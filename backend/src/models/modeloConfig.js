@@ -9,6 +9,5 @@ const itemScheduleSchema = z.object({
 });
 
 export const updateConfigSchema = z.object({
-  isOpenOverride: z.boolean().nullable(),
   schedule: z.array(itemScheduleSchema).length(7, 'El cronograma debe incluir exactamente los 7 días de la semana')
 });

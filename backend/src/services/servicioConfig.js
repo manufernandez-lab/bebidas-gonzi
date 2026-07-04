@@ -70,7 +70,6 @@ export const servicioConfig = {
 
   async updateConfig(newConfig) {
     const payload = {
-      isOpenOverride: newConfig.isOpenOverride,
       schedule: newConfig.schedule
     };
 
@@ -92,9 +91,6 @@ export const servicioConfig = {
   },
 
   calculateIsOpen(config) {
-    if (config.isOpenOverride === true) return true;
-    if (config.isOpenOverride === false) return false;
-
     // Get time in America/Argentina/Buenos_Aires (UTC-3)
     const argDate = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Argentina/Buenos_Aires' }));
     const dayIndex = argDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday

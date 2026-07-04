@@ -34,7 +34,6 @@ export default function Admin() {
 
   // Schedule config states
   const [scheduleConfig, setScheduleConfig] = useState(null);
-  const [overrideStatus, setOverrideStatus] = useState('auto'); // 'auto', 'open', 'closed'
   const [configLoading, setConfigLoading] = useState(false);
   const [configError, setConfigError] = useState('');
   const [configSuccess, setConfigSuccess] = useState('');
@@ -73,9 +72,6 @@ export default function Admin() {
       const response = await api.get('/config');
       const conf = response.data.data.config;
       setScheduleConfig(conf);
-      if (conf.isOpenOverride === true) setOverrideStatus('open');
-      else if (conf.isOpenOverride === false) setOverrideStatus('closed');
-      else setOverrideStatus('auto');
     } catch (err) {
       console.error(err);
       setConfigError('Error al cargar la configuración de horarios');
@@ -109,10 +105,6 @@ export default function Admin() {
       setConfigError('');
       setConfigSuccess('');
       
-      let isOpenOverride = null;
-      if (overrideStatus === 'open') isOpenOverride = true;
-      if (overrideStatus === 'closed') isOpenOverride = false;
-
       // Validate times before sending
       const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
       for (const d of scheduleConfig.schedule) {
@@ -125,7 +117,6 @@ export default function Admin() {
       }
 
       const payload = {
-        isOpenOverride,
         schedule: scheduleConfig.schedule
       };
 
@@ -586,7 +577,6 @@ export default function Admin() {
                     </div>
                   </div>
                 ))}
-              </div>
             )}
           </div>
         )
@@ -594,53 +584,6 @@ export default function Admin() {
 
       {activeTab === 'schedule' && (
         <div>
-          {/* Override Section */}
-          <div className="glass-panel" style={{ padding: '2rem', marginBottom: '2rem', border: '1px solid var(--glass-border)' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-              </svg>
-              Estado de Apertura (Override Manual)
-            </h3>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: '1.5rem', lineHeight: '1.4' }}>
-              Permite anular temporalmente el horario programado para forzar la tienda a estar abierta o cerrada de manera inmediata.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              {[
-                { id: 'auto', label: 'Horario Automático', color: 'var(--text-primary)' },
-                { id: 'open', label: 'Forzar Abierto 🟢', color: '#2E7D32', bg: 'rgba(46, 125, 50, 0.08)' },
-                { id: 'closed', label: 'Forzar Cerrado 🔴', color: '#C62828', bg: 'rgba(198, 40, 40, 0.08)' }
-              ].map((option) => {
-                const isSelected = overrideStatus === option.id;
-                return (
-                  <button
-                    key={option.id}
-                    type="button"
-                    onClick={() => setOverrideStatus(option.id)}
-                    className="btn"
-                    style={{
-                      padding: '0.75rem 1.5rem',
-                      borderRadius: '12px',
-                      fontSize: '0.9rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      border: isSelected 
-                        ? `2px solid ${option.id === 'open' ? '#2E7D32' : option.id === 'closed' ? '#C62828' : 'var(--accent)'}` 
-                        : '1px solid var(--glass-border)',
-                      background: isSelected 
-                        ? (option.bg || 'rgba(198, 40, 40, 0.04)') 
-                        : '#ffffff',
-                      color: isSelected ? option.color : 'var(--text-secondary)',
-                      transition: 'var(--transition)'
-                    }}
-                  >
-                    {option.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Schedule Configuration List */}
           <div className="glass-panel" style={{ padding: '2rem', border: '1px solid var(--glass-border)' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
