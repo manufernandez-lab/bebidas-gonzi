@@ -22,25 +22,97 @@ const getCategoryFilename = (category) => {
   return mapping[category.toLowerCase()] || `${category.toLowerCase().replace(/\s+/g, '')}.json`;
 };
 
+const saveBase64Image = async (base64Str) => {
+  if (!base64Str || !base64Str.startsWith('data:image/')) {
+    return base64Str;
+  }
+  
+  try {
+    const matches = base64Str.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return base64Str;
+    }
+    
+    const type = matches[1];
+    const buffer = Buffer.from(matches[2], 'base64');
+    
+    // Determine extension
+    let ext = 'jpg';
+    if (type.includes('png')) ext = 'png';
+    else if (type.includes('webp')) ext = 'webp';
+    else if (type.includes('gif')) ext = 'gif';
+    
+    const filename = `${crypto.randomUUID()}.${ext}`;
+    const uploadsDir = path.join(__dirname, '../../uploads');
+    
+    // Ensure uploads directory exists
+    await fs.mkdir(uploadsDir, { recursive: true });
+    
+    const destPath = path.join(uploadsDir, filename);
+    await fs.writeFile(destPath, buffer);
+    
+    return `/uploads/${filename}`;
+  } catch (error) {
+    console.error('Error al guardar la imagen Base64:', error);
+    return base64Str;
+  }
+};
+
 const initData = async () => {
   try {
     await fs.mkdir(path.dirname(filePath), { recursive: true });
     await fs.mkdir(categoriesDir, { recursive: true });
     
+    const uploadsDir = path.join(__dirname, '../../uploads');
+    await fs.mkdir(uploadsDir, { recursive: true });
+
     const files = await fs.readdir(categoriesDir);
     let allProducts = [];
 
     for (const file of files) {
       if (file.endsWith('.json')) {
-        const fileContent = await fs.readFile(path.join(categoriesDir, file), 'utf-8');
+        const fileCategoryPath = path.join(categoriesDir, file);
+        const fileContent = await fs.readFile(fileCategoryPath, 'utf-8');
         try {
           const products = JSON.parse(fileContent);
           if (Array.isArray(products)) {
+            let modified = false;
+            for (const product of products) {
+              if (product.imageUrl && product.imageUrl.startsWith('data:image/')) {
+                const savedPath = await saveBase64Image(product.imageUrl);
+                if (savedPath.startsWith('/uploads/')) {
+                  product.imageUrl = savedPath;
+                  modified = true;
+                }
+              }
+            }
+            if (modified) {
+              await fs.writeFile(fileCategoryPath, JSON.stringify(products, null, 2));
+              console.log(`💾 Migradas imágenes Base64 a archivos físicos en categoría: ${file}`);
+            }
             allProducts = allProducts.concat(products);
           }
         } catch (jsonErr) {
           console.error(`Error parseando el archivo ${file}:`, jsonErr);
         }
+      }
+    }
+
+    // Si Mongo está conectado, migrar también las imágenes de los productos en la base de datos
+    if (isMongoConnected()) {
+      try {
+        const mongoProducts = await ProductModel.find().lean();
+        for (const product of mongoProducts) {
+          if (product.imageUrl && product.imageUrl.startsWith('data:image/')) {
+            const savedPath = await saveBase64Image(product.imageUrl);
+            if (savedPath.startsWith('/uploads/')) {
+              await ProductModel.updateOne({ id: product.id }, { imageUrl: savedPath });
+              console.log(`💾 Migrada imagen en MongoDB para producto: ${product.name}`);
+            }
+          }
+        }
+      } catch (mongoErr) {
+        console.error('Error migrando imágenes en MongoDB:', mongoErr);
       }
     }
 
@@ -72,12 +144,13 @@ export const servicioProducto = {
 
   async create(productData) {
     const id = productData.id || crypto.randomUUID();
+    const imageUrl = await saveBase64Image(productData.imageUrl);
     const newProduct = {
       id,
       name: productData.name,
       price: Number(productData.price),
       category: productData.category,
-      imageUrl: productData.imageUrl,
+      imageUrl,
       isAvailable: productData.isAvailable !== undefined ? productData.isAvailable : true
     };
 
@@ -104,6 +177,9 @@ export const servicioProducto = {
 
   async update(id, productData) {
     if (isMongoConnected()) {
+      if (productData.imageUrl) {
+        productData.imageUrl = await saveBase64Image(productData.imageUrl);
+      }
       const doc = await ProductModel.findOneAndUpdate({ id }, productData, { new: true }).lean();
       return doc;
     }
@@ -129,12 +205,14 @@ export const servicioProducto = {
 
     if (!originalProduct) return null;
 
+    const imageUrl = productData.imageUrl !== undefined ? await saveBase64Image(productData.imageUrl) : originalProduct.imageUrl;
+
     const updatedProduct = {
       ...originalProduct,
       name: productData.name !== undefined ? productData.name : originalProduct.name,
       price: productData.price !== undefined ? Number(productData.price) : originalProduct.price,
       category: productData.category !== undefined ? productData.category : originalProduct.category,
-      imageUrl: productData.imageUrl !== undefined ? productData.imageUrl : originalProduct.imageUrl,
+      imageUrl,
       isAvailable: productData.isAvailable !== undefined ? productData.isAvailable : originalProduct.isAvailable
     };
 

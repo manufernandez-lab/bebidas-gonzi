@@ -1,6 +1,19 @@
 import { servicioProducto } from '../services/servicioProducto.js';
 import { ErrorAplicacion } from '../utils/errorAplicacion.js';
 
+const mapProductImageUrl = (req, product) => {
+  if (!product) return product;
+  if (product.imageUrl && product.imageUrl.startsWith('/uploads/')) {
+    const protocol = req.protocol;
+    const host = req.get('host');
+    return {
+      ...product,
+      imageUrl: `${protocol}://${host}${product.imageUrl}`
+    };
+  }
+  return product;
+};
+
 export const getAllProducts = async (req, res, next) => {
   try {
     const products = await servicioProducto.getAll();
@@ -21,7 +34,7 @@ export const getAllProducts = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       results: filtered.length,
-      data: { products: filtered }
+      data: { products: filtered.map(p => mapProductImageUrl(req, p)) }
     });
   } catch (error) {
     next(error);
@@ -39,7 +52,7 @@ export const getProductById = async (req, res, next) => {
 
     res.status(200).json({
       status: 'success',
-      data: { product }
+      data: { product: mapProductImageUrl(req, product) }
     });
   } catch (error) {
     next(error);
@@ -51,7 +64,7 @@ export const createProduct = async (req, res, next) => {
     const newProduct = await servicioProducto.create(req.body);
     res.status(201).json({
       status: 'success',
-      data: { product: newProduct }
+      data: { product: mapProductImageUrl(req, newProduct) }
     });
   } catch (error) {
     next(error);
@@ -69,7 +82,7 @@ export const updateProduct = async (req, res, next) => {
 
     res.status(200).json({
       status: 'success',
-      data: { product: updated }
+      data: { product: mapProductImageUrl(req, updated) }
     });
   } catch (error) {
     next(error);
