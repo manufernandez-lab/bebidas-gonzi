@@ -5,7 +5,7 @@ const StoreConfigContext = createContext();
 
 export const StoreConfigProvider = ({ children }) => {
   const [config, setConfig] = useState(null);
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 

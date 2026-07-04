@@ -6,14 +6,14 @@ import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 export default function BarraNavegacion() {
   const { cartCount } = useCart();
   const location = useLocation();
-  const { isOpen, config, loading } = useStoreConfig();
+  const { isOpen, config } = useStoreConfig();
   const [showHours, setShowHours] = useState(false);
 
   // Dynamic badge styling and texts
-  const badgeText = loading ? 'Cargando...' : (isOpen ? 'Abierto' : 'Cerrado');
-  const badgeColor = loading ? '#757575' : (isOpen ? '#2E7D32' : '#C62828');
-  const badgeBg = loading ? 'rgba(117, 117, 117, 0.08)' : (isOpen ? 'rgba(46, 125, 50, 0.08)' : 'rgba(198, 40, 40, 0.08)');
-  const badgeBorder = loading ? 'rgba(117, 117, 117, 0.2)' : (isOpen ? 'rgba(46, 125, 50, 0.2)' : 'rgba(198, 40, 40, 0.2)');
+  const badgeText = isOpen ? 'Abierto' : 'Cerrado';
+  const badgeColor = isOpen ? '#2E7D32' : '#C62828';
+  const badgeBg = isOpen ? 'rgba(46, 125, 50, 0.08)' : 'rgba(198, 40, 40, 0.08)';
+  const badgeBorder = isOpen ? 'rgba(46, 125, 50, 0.2)' : 'rgba(198, 40, 40, 0.2)';
 
   return (
     <nav className="glass-panel" style={{
