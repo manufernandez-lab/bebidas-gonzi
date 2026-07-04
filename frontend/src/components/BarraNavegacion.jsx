@@ -6,8 +6,14 @@ import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 export default function BarraNavegacion() {
   const { cartCount } = useCart();
   const location = useLocation();
-  const { isOpen, config } = useStoreConfig();
+  const { isOpen, config, loading } = useStoreConfig();
   const [showHours, setShowHours] = useState(false);
+
+  // Dynamic badge styling and texts
+  const badgeText = loading ? 'Cargando...' : (isOpen ? 'Abierto' : 'Cerrado');
+  const badgeColor = loading ? '#757575' : (isOpen ? '#2E7D32' : '#C62828');
+  const badgeBg = loading ? 'rgba(117, 117, 117, 0.08)' : (isOpen ? 'rgba(46, 125, 50, 0.08)' : 'rgba(198, 40, 40, 0.08)');
+  const badgeBorder = loading ? 'rgba(117, 117, 117, 0.2)' : (isOpen ? 'rgba(46, 125, 50, 0.2)' : 'rgba(198, 40, 40, 0.2)');
 
   return (
     <nav className="glass-panel" style={{
@@ -95,9 +101,9 @@ export default function BarraNavegacion() {
             onMouseEnter={() => setShowHours(true)}
             onMouseLeave={() => setShowHours(false)}
             style={{
-              background: isOpen ? 'rgba(46, 125, 50, 0.08)' : 'rgba(198, 40, 40, 0.08)',
-              color: isOpen ? '#2E7D32' : '#C62828',
-              border: `1px solid ${isOpen ? 'rgba(46, 125, 50, 0.2)' : 'rgba(198, 40, 40, 0.2)'}`,
+              background: badgeBg,
+              color: badgeColor,
+              border: `1px solid ${badgeBorder}`,
               padding: '0.4rem 0.9rem',
               borderRadius: '9999px',
               fontSize: '0.85rem',
@@ -114,11 +120,11 @@ export default function BarraNavegacion() {
               width: '8px',
               height: '8px',
               borderRadius: '50%',
-              background: isOpen ? '#2E7D32' : '#C62828',
+              background: badgeColor,
               display: 'inline-block',
-              boxShadow: `0 0 8px ${isOpen ? '#2E7D32' : '#C62828'}`
+              boxShadow: `0 0 8px ${badgeColor}`
             }}></span>
-            {isOpen ? 'Abierto' : 'Cerrado'}
+            {badgeText}
           </button>
           
           {showHours && config && config.schedule && (
