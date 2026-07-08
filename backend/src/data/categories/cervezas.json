@@ -4,7 +4,7 @@
     "name": "Cerveza Corona 710ml",
     "price": 9000,
     "category": "Cervezas",
-    "imageUrl": "/uploads/0b1c84f2-d6a5-4b16-83b1-4f454ae9550e.jpg",
+    "imageUrl": "/uploads/0b1c84f2-d6a5-4b16-83b1-4f454ae9550e.webp",
     "isAvailable": true
   },
   {
@@ -12,7 +12,7 @@
     "name": "Cerveza Artesanal Politburo 1l",
     "price": 7500,
     "category": "Cervezas",
-    "imageUrl": "/uploads/6a4546ff-53e7-4e3e-a947-d94947e8749d.jpg",
+    "imageUrl": "/uploads/6a4546ff-53e7-4e3e-a947-d94947e8749d.webp",
     "isAvailable": true
   },
   {
@@ -20,7 +20,7 @@
     "name": "Cerveza Patagonia Vera Ipa 710ml",
     "price": 9000,
     "category": "Cervezas",
-    "imageUrl": "/uploads/dabadd68-b01e-4a43-b909-53df9b5bb93e.jpg",
+    "imageUrl": "/uploads/dabadd68-b01e-4a43-b909-53df9b5bb93e.webp",
     "isAvailable": true
   },
   {
@@ -28,7 +28,7 @@
     "name": "Cerveza Patagonia 24.7 710ml",
     "price": 9000,
     "category": "Cervezas",
-    "imageUrl": "/uploads/bf3364ed-6969-49b2-99f6-7fef3424efdc.jpg",
+    "imageUrl": "/uploads/bf3364ed-6969-49b2-99f6-7fef3424efdc.webp",
     "isAvailable": true
   },
   {
@@ -36,7 +36,7 @@
     "name": "Pack Andes Ipa x 6 unidades",
     "price": 19000,
     "category": "Cervezas",
-    "imageUrl": "/uploads/ecb7a359-1369-4156-8850-ac68bec9724e.jpg",
+    "imageUrl": "/uploads/ecb7a359-1369-4156-8850-ac68bec9724e.webp",
     "isAvailable": true
   },
   {
@@ -44,7 +44,7 @@
     "name": "Pack Heineken x 6 unidades",
     "price": 20000,
     "category": "Cervezas",
-    "imageUrl": "/uploads/7eab03c2-04f1-49e6-9498-6e77ba3d03be.jpg",
+    "imageUrl": "/uploads/7eab03c2-04f1-49e6-9498-6e77ba3d03be.webp",
     "isAvailable": true
   },
   {
@@ -52,7 +52,7 @@
     "name": "Pack Andes Clasica x 6 unidades",
     "price": 16000,
     "category": "Cervezas",
-    "imageUrl": "/uploads/4e396698-6dab-4b64-8658-1aa9fc5122f2.jpg",
+    "imageUrl": "/uploads/4e396698-6dab-4b64-8658-1aa9fc5122f2.webp",
     "isAvailable": true
   },
   {
@@ -60,7 +60,7 @@
     "name": "Pack Quilmes 1890 x 6 unidades",
     "price": 14000,
     "category": "Cervezas",
-    "imageUrl": "/uploads/770d4cef-95a2-4140-9563-7e9f7b72a6a0.jpg",
+    "imageUrl": "/uploads/770d4cef-95a2-4140-9563-7e9f7b72a6a0.webp",
     "isAvailable": true
   },
   {
@@ -68,7 +68,7 @@
     "name": "Pack Stella Artois x 6 unidades",
     "price": 20000,
     "category": "Cervezas",
-    "imageUrl": "/uploads/5aa55fac-6b2a-417c-99ba-d685b143c3e2.jpg",
+    "imageUrl": "/uploads/5aa55fac-6b2a-417c-99ba-d685b143c3e2.webp",
     "isAvailable": true
   }
 ]

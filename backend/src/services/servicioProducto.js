@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
+import sharp from 'sharp';
 import { isMongoConnected, ProductModel } from '../config/db.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -33,27 +34,26 @@ const saveBase64Image = async (base64Str) => {
       return base64Str;
     }
     
-    const type = matches[1];
     const buffer = Buffer.from(matches[2], 'base64');
     
-    // Determine extension
-    let ext = 'jpg';
-    if (type.includes('png')) ext = 'png';
-    else if (type.includes('webp')) ext = 'webp';
-    else if (type.includes('gif')) ext = 'gif';
-    
-    const filename = `${crypto.randomUUID()}.${ext}`;
+    // We force output format to webp for optimum size/quality ratio
+    const filename = `${crypto.randomUUID()}.webp`;
     const uploadsDir = path.join(__dirname, '../../uploads');
     
     // Ensure uploads directory exists
     await fs.mkdir(uploadsDir, { recursive: true });
     
     const destPath = path.join(uploadsDir, filename);
-    await fs.writeFile(destPath, buffer);
+    
+    // Process image: limit width to 800px (keeping aspect ratio) and convert to webp quality 80
+    await sharp(buffer)
+      .resize({ width: 800, withoutEnlargement: true })
+      .webp({ quality: 80 })
+      .toFile(destPath);
     
     return `/uploads/${filename}`;
   } catch (error) {
-    console.error('Error al guardar la imagen Base64:', error);
+    console.error('Error al guardar y comprimir la imagen Base64:', error);
     return base64Str;
   }
 };

@@ -4,7 +4,7 @@
     "name": "Vodka Smirnoff 750mL",
     "price": 15000,
     "category": "Bebidas Blancas",
-    "imageUrl": "/uploads/7a613d34-0496-4627-a7bb-c0628bd88122.jpg",
+    "imageUrl": "/uploads/7a613d34-0496-4627-a7bb-c0628bd88122.webp",
     "isAvailable": true
   },
   {
@@ -12,7 +12,7 @@
     "name": "Vodka Sky 750mL",
     "price": 16000,
     "category": "Bebidas Blancas",
-    "imageUrl": "/uploads/bd7f821b-3a11-415e-b594-cb6cf1323fa8.jpg",
+    "imageUrl": "/uploads/bd7f821b-3a11-415e-b594-cb6cf1323fa8.webp",
     "isAvailable": true
   },
   {
@@ -20,7 +20,7 @@
     "name": "Gin Gordons 700ml",
     "price": 16000,
     "category": "Bebidas Blancas",
-    "imageUrl": "/uploads/dccc3208-d148-4dba-a4fd-2fe298ea43b0.jpg",
+    "imageUrl": "/uploads/dccc3208-d148-4dba-a4fd-2fe298ea43b0.webp",
     "isAvailable": true
   },
   {
@@ -28,7 +28,7 @@
     "name": "Malibu 750ml",
     "price": 19000,
     "category": "Bebidas Blancas",
-    "imageUrl": "/uploads/1341d3e4-8b78-4794-b747-231ee5937efd.jpg",
+    "imageUrl": "/uploads/1341d3e4-8b78-4794-b747-231ee5937efd.webp",
     "isAvailable": true
   }
 ]

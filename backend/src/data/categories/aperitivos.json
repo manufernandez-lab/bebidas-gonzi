@@ -4,7 +4,7 @@
     "name": "Fernet Branca 750ml",
     "price": 20000,
     "category": "Aperitivos",
-    "imageUrl": "/uploads/03c3a91a-596f-47f4-ada4-9ef8b53fbcb3.jpg",
+    "imageUrl": "/uploads/03c3a91a-596f-47f4-ada4-9ef8b53fbcb3.webp",
     "isAvailable": true
   },
   {
@@ -12,7 +12,7 @@
     "name": "Americano Gancia 950mL",
     "price": 12000,
     "category": "Aperitivos",
-    "imageUrl": "/uploads/54649d4e-aaef-4f7e-86fc-dfd5278ee575.jpg",
+    "imageUrl": "/uploads/54649d4e-aaef-4f7e-86fc-dfd5278ee575.webp",
     "isAvailable": true
   },
   {
@@ -20,7 +20,7 @@
     "name": "Jägermeister 700ml",
     "price": 40000,
     "category": "Aperitivos",
-    "imageUrl": "/uploads/5595ab42-76c9-4862-a3df-7a953460282f.jpg",
+    "imageUrl": "/uploads/5595ab42-76c9-4862-a3df-7a953460282f.webp",
     "isAvailable": true
   }
 ]

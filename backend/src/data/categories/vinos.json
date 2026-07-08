@@ -4,7 +4,7 @@
     "name": "Vino Malbec 750ml",
     "price": 7500,
     "category": "Vinos",
-    "imageUrl": "/uploads/8a9bcf15-0840-4c82-99ab-9fc3d014a52a.jpg",
+    "imageUrl": "/uploads/8a9bcf15-0840-4c82-99ab-9fc3d014a52a.webp",
     "isAvailable": true
   },
   {
@@ -12,7 +12,7 @@
     "name": "Vino Blanco Dulce 750ml",
     "price": 7500,
     "category": "Vinos",
-    "imageUrl": "/uploads/1041716b-7264-46a8-95d6-1f79d0f9cfcb.jpg",
+    "imageUrl": "/uploads/1041716b-7264-46a8-95d6-1f79d0f9cfcb.webp",
     "isAvailable": true
   }
 ]

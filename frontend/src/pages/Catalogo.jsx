@@ -3,6 +3,42 @@ import api from '../services/clienteApi';
 import { useCart } from '../context/ContextoCarrito.jsx';
 import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 
+const ImagenOptimizada = ({ src, alt }) => {
+  const [cargada, setCargada] = useState(false);
+  return (
+    <div style={{ width: '100%', height: '100%', position: 'relative', background: 'var(--bg-secondary)', overflow: 'hidden' }}>
+      {!cargada && (
+        <div 
+          className="shimmer"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1
+          }}
+        />
+      )}
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        onLoad={() => setCargada(true)}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          transition: 'opacity 0.4s ease, transform var(--transition)',
+          opacity: cargada ? 1 : 0
+        }}
+        onMouseOver={(e) => cargada && (e.currentTarget.style.transform = 'scale(1.04)')}
+        onMouseOut={(e) => cargada && (e.currentTarget.style.transform = 'scale(1)')}
+      />
+    </div>
+  );
+};
+
 export default function Catalogo() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -234,12 +270,9 @@ export default function Catalogo() {
                 }}
               >
                 <div style={{ width: '100%', height: '200px', position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}>
-                  <img 
+                  <ImagenOptimizada 
                     src={product.imageUrl} 
                     alt={product.name} 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'var(--transition)' }}
-                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.04)'}
-                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                   />
                   <span style={{
                     position: 'absolute',

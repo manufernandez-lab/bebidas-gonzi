@@ -4,7 +4,7 @@
     "name": "Fernet Branca 750ml + Coca Cola 2,5L",
     "price": 23000,
     "category": "Promos",
-    "imageUrl": "/uploads/a7707c0c-fd24-43b9-ae6b-ef9b8967d4a6.jpg",
+    "imageUrl": "/uploads/a7707c0c-fd24-43b9-ae6b-ef9b8967d4a6.webp",
     "isAvailable": true
   },
   {
@@ -12,7 +12,7 @@
     "name": "Fernet Branca 750ml + Coca Cola 3L",
     "price": 26000,
     "category": "Promos",
-    "imageUrl": "/uploads/2e6f9043-cbdd-40a8-949d-1d8325bbf04d.jpg",
+    "imageUrl": "/uploads/2e6f9043-cbdd-40a8-949d-1d8325bbf04d.webp",
     "isAvailable": true
   },
   {
@@ -20,7 +20,7 @@
     "name": "Vodka Smirnoff 750ml + Jugo Baggio 1,5l",
     "price": 20000,
     "category": "Promos",
-    "imageUrl": "/uploads/882ef713-9191-4c21-83d1-a92657dcf550.jpg",
+    "imageUrl": "/uploads/882ef713-9191-4c21-83d1-a92657dcf550.webp",
     "isAvailable": true
   },
   {
@@ -28,7 +28,7 @@
     "name": "Vodka Smirnoff 750mL + 3 Speed 250mL",
     "price": 20000,
     "category": "Promos",
-    "imageUrl": "/uploads/18723330-8106-4720-b6b8-bb4f436c6186.jpg",
+    "imageUrl": "/uploads/18723330-8106-4720-b6b8-bb4f436c6186.webp",
     "isAvailable": true
   },
   {
@@ -36,7 +36,7 @@
     "name": "Fernet Branca 750ml + Coca Cola 2,5l + Hielo Roma 2,5kg",
     "price": 26000,
     "category": "Promos",
-    "imageUrl": "/uploads/d21e2046-d3f2-434e-bca4-2661431a8826.jpg",
+    "imageUrl": "/uploads/d21e2046-d3f2-434e-bca4-2661431a8826.webp",
     "isAvailable": true
   },
   {
@@ -44,7 +44,7 @@
     "name": "Fernet Branca 750ml + Coca Cola 3l + Hielo Roma 2,5kg",
     "price": 29000,
     "category": "Promos",
-    "imageUrl": "/uploads/f3907fcd-f4df-4af4-9e57-a13184eaf4ad.jpg",
+    "imageUrl": "/uploads/f3907fcd-f4df-4af4-9e57-a13184eaf4ad.webp",
     "isAvailable": true
   },
   {
@@ -52,7 +52,7 @@
     "name": "Vodka Smirnoff 750ml + Jugo Baggio 1,5l + Hielo Roma 2,5kg",
     "price": 23000,
     "category": "Promos",
-    "imageUrl": "/uploads/4f3222fb-7da2-41ea-ac42-80771fb6ba24.jpg",
+    "imageUrl": "/uploads/4f3222fb-7da2-41ea-ac42-80771fb6ba24.webp",
     "isAvailable": true
   },
   {
@@ -60,7 +60,7 @@
     "name": "Vodka Smirnoff 750ml + 3 Speed 250ml + Hielo Roma 2,5kg",
     "price": 23000,
     "category": "Promos",
-    "imageUrl": "/uploads/f15f296e-c912-47c6-b81f-ca275365594a.jpg",
+    "imageUrl": "/uploads/f15f296e-c912-47c6-b81f-ca275365594a.webp",
     "isAvailable": true
   },
   {
@@ -68,7 +68,7 @@
     "name": "Vodka Sky 750ml + Jugo Baggio 1,5l",
     "price": 21000,
     "category": "Promos",
-    "imageUrl": "/uploads/97960fc2-131f-4066-91ed-b0270e161966.jpg",
+    "imageUrl": "/uploads/97960fc2-131f-4066-91ed-b0270e161966.webp",
     "isAvailable": true
   },
   {
@@ -76,7 +76,7 @@
     "name": "Vodka Sky 750mL + 3 Speed 250mL",
     "price": 21000,
     "category": "Promos",
-    "imageUrl": "/uploads/424f6987-dd07-4320-8652-249f9b0ad2f9.jpg",
+    "imageUrl": "/uploads/424f6987-dd07-4320-8652-249f9b0ad2f9.webp",
     "isAvailable": true
   },
   {
@@ -84,7 +84,7 @@
     "name": "Vodka Sky 750ml + Jugo Baggio 1,5l + Hielo Roma 2,5kg",
     "price": 24000,
     "category": "Promos",
-    "imageUrl": "/uploads/b51c1217-950b-4e90-b593-26f524658b39.jpg",
+    "imageUrl": "/uploads/b51c1217-950b-4e90-b593-26f524658b39.webp",
     "isAvailable": true
   },
   {
@@ -92,7 +92,7 @@
     "name": "Vodka Sky 750mL + 3 Speed 250mL + Hielo Roma 2,5Kg",
     "price": 24000,
     "category": "Promos",
-    "imageUrl": "/uploads/43007f11-1f1e-45f3-a2b7-3418ba10f185.jpg",
+    "imageUrl": "/uploads/43007f11-1f1e-45f3-a2b7-3418ba10f185.webp",
     "isAvailable": true
   },
   {
@@ -100,7 +100,7 @@
     "name": "Gin Gordons 700ml + Tonica Schweppes 1,5l",
     "price": 19000,
     "category": "Promos",
-    "imageUrl": "/uploads/40a875e4-b824-4290-98c1-ca6057190e9c.jpg",
+    "imageUrl": "/uploads/40a875e4-b824-4290-98c1-ca6057190e9c.webp",
     "isAvailable": true
   },
   {
@@ -108,7 +108,7 @@
     "name": "Ginebra Gordons 700ml + Tonica Schweppes 1,5l + Hielo Roma 2,5kg",
     "price": 21000,
     "category": "Promos",
-    "imageUrl": "/uploads/1bc55f9c-1fae-4298-a629-bcbe110359a3.jpg",
+    "imageUrl": "/uploads/1bc55f9c-1fae-4298-a629-bcbe110359a3.webp",
     "isAvailable": true
   },
   {
@@ -116,7 +116,7 @@
     "name": "Americano Gancia 950ml + Sprite 2,5l",
     "price": 17000,
     "category": "Promos",
-    "imageUrl": "/uploads/30278a91-af81-484c-9f4d-59ecd0598170.jpg",
+    "imageUrl": "/uploads/30278a91-af81-484c-9f4d-59ecd0598170.webp",
     "isAvailable": true
   },
   {
@@ -124,7 +124,7 @@
     "name": "Americano Gancia 950ml + Sprite 2,5l + Hielo Roma 2,5kg",
     "price": 20000,
     "category": "Promos",
-    "imageUrl": "/uploads/d472db98-a164-4d77-b31c-90292da191f3.jpg",
+    "imageUrl": "/uploads/d472db98-a164-4d77-b31c-90292da191f3.webp",
     "isAvailable": true
   },
   {
@@ -132,7 +132,7 @@
     "name": "Cerveza Corona 710ml x 6 unidades",
     "price": 50000,
     "category": "Promos",
-    "imageUrl": "/uploads/d19c36fb-a8ef-4243-84df-49f4c9e7e505.jpg",
+    "imageUrl": "/uploads/d19c36fb-a8ef-4243-84df-49f4c9e7e505.webp",
     "isAvailable": true
   },
   {
@@ -140,7 +140,7 @@
     "name": "Cerveza Artesanal Politburo 1l x 3 unidades",
     "price": 21000,
     "category": "Promos",
-    "imageUrl": "/uploads/73105d9e-e7ba-41e3-a801-2602eb99cf6b.jpg",
+    "imageUrl": "/uploads/73105d9e-e7ba-41e3-a801-2602eb99cf6b.webp",
     "isAvailable": true
   },
   {
@@ -148,7 +148,7 @@
     "name": "Cerveza Artesanal Politburo 1l x 6 unidades",
     "price": 38000,
     "category": "Promos",
-    "imageUrl": "/uploads/0873d4f1-851f-47c1-ac57-9f59473442bf.jpg",
+    "imageUrl": "/uploads/0873d4f1-851f-47c1-ac57-9f59473442bf.webp",
     "isAvailable": true
   },
   {
@@ -156,7 +156,7 @@
     "name": "Cerveza Patagonia Vera Ipa 710ml x 3 unidades",
     "price": 25000,
     "category": "Promos",
-    "imageUrl": "/uploads/2eb38c30-a211-4e4f-bfc6-08cb652f7864.jpg",
+    "imageUrl": "/uploads/2eb38c30-a211-4e4f-bfc6-08cb652f7864.webp",
     "isAvailable": true
   },
   {
@@ -164,7 +164,7 @@
     "name": "Cerveza Patagonia Vera Ipa 710ml x 6 unidades",
     "price": 40000,
     "category": "Promos",
-    "imageUrl": "/uploads/8aa2a930-50b8-40dc-b41e-f3e6bfa9a28a.jpg",
+    "imageUrl": "/uploads/8aa2a930-50b8-40dc-b41e-f3e6bfa9a28a.webp",
     "isAvailable": true
   },
   {
@@ -172,7 +172,7 @@
     "name": "Cerveza Patagonia 24.7 710ml x 3 unidades",
     "price": 25000,
     "category": "Promos",
-    "imageUrl": "/uploads/a16711b9-f2f2-45cc-bc2d-0348f59269d3.jpg",
+    "imageUrl": "/uploads/a16711b9-f2f2-45cc-bc2d-0348f59269d3.webp",
     "isAvailable": true
   },
   {
@@ -180,7 +180,7 @@
     "name": "Cerveza Patagonia 24.7 710ml x 6 unidades",
     "price": 40000,
     "category": "Promos",
-    "imageUrl": "/uploads/41d801af-40a3-4e3d-9214-681412bb1390.jpg",
+    "imageUrl": "/uploads/41d801af-40a3-4e3d-9214-681412bb1390.webp",
     "isAvailable": true
   },
   {
@@ -188,7 +188,7 @@
     "name": "Jägermeister 700ml + 8 Red Bull 250ml",
     "price": 60000,
     "category": "Promos",
-    "imageUrl": "/uploads/6d8c98d7-8970-4f5a-a45a-d9553ca88098.jpg",
+    "imageUrl": "/uploads/6d8c98d7-8970-4f5a-a45a-d9553ca88098.webp",
     "isAvailable": true
   },
   {
@@ -196,7 +196,7 @@
     "name": "Malibu 750ml + Jugo Baggio 1,5l",
     "price": 22000,
     "category": "Promos",
-    "imageUrl": "/uploads/d7f46240-867c-442a-af05-110396952cb6.jpg",
+    "imageUrl": "/uploads/d7f46240-867c-442a-af05-110396952cb6.webp",
     "isAvailable": true
   },
   {
@@ -204,7 +204,7 @@
     "name": "Jägermeister 700ml + 8 Red Bull 250ml + Hielo Roma 2,5kg",
     "price": 63000,
     "category": "Promos",
-    "imageUrl": "/uploads/23f71a15-ab62-467e-8ac0-f654d77cd82a.jpg",
+    "imageUrl": "/uploads/23f71a15-ab62-467e-8ac0-f654d77cd82a.webp",
     "isAvailable": true
   },
   {
@@ -212,7 +212,7 @@
     "name": "Malibu 750ml + Jugo Baggio 1,5l + Hielo Roma 2,5kg",
     "price": 25000,
     "category": "Promos",
-    "imageUrl": "/uploads/fbe0dcdb-8100-4bda-8412-04cfc872c540.jpg",
+    "imageUrl": "/uploads/fbe0dcdb-8100-4bda-8412-04cfc872c540.webp",
     "isAvailable": true
   },
   {
@@ -220,7 +220,7 @@
     "name": "Vino Blanco Dulce 750ml + Hielo Roma 2,5kg",
     "price": 10500,
     "category": "Promos",
-    "imageUrl": "/uploads/3fb818bd-de7f-4e06-b0e2-7d6b34d5cfcc.jpg",
+    "imageUrl": "/uploads/3fb818bd-de7f-4e06-b0e2-7d6b34d5cfcc.webp",
     "isAvailable": true
   },
   {
@@ -228,7 +228,7 @@
     "name": "Vino Malbec 750ml + Hielo Roma 2,5kg",
     "price": 10500,
     "category": "Promos",
-    "imageUrl": "/uploads/b63086d6-eefb-42ea-ba08-070e376c108d.jpg",
+    "imageUrl": "/uploads/b63086d6-eefb-42ea-ba08-070e376c108d.webp",
     "isAvailable": true
   }
 ]

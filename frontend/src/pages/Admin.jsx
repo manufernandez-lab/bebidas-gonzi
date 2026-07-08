@@ -489,6 +489,7 @@ export default function Admin() {
                       <img
                         src={product.imageUrl}
                         alt={product.name}
+                        loading="lazy"
                         style={{
                           width: '70px',
                           height: '70px',

@@ -4,7 +4,7 @@
     "name": "Coca Cola 1,5l",
     "price": 6000,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/944a3301-0a05-4d1a-be99-937ce85f544a.jpg",
+    "imageUrl": "/uploads/944a3301-0a05-4d1a-be99-937ce85f544a.webp",
     "isAvailable": true
   },
   {
@@ -12,7 +12,7 @@
     "name": "Coca Cola 2,25l",
     "price": 8500,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/6f895d1d-a590-4a6b-b969-55f4c4544c81.jpg",
+    "imageUrl": "/uploads/6f895d1d-a590-4a6b-b969-55f4c4544c81.webp",
     "isAvailable": true
   },
   {
@@ -20,7 +20,7 @@
     "name": "Coca Cola 3l",
     "price": 9000,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/4c098708-6f92-4727-93ec-15ee0beba047.jpg",
+    "imageUrl": "/uploads/4c098708-6f92-4727-93ec-15ee0beba047.webp",
     "isAvailable": true
   },
   {
@@ -28,7 +28,7 @@
     "name": "Coca Cola Zero 2,25l",
     "price": 8500,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/77f947be-aca5-49de-a8a9-ac1febdcedc6.jpg",
+    "imageUrl": "/uploads/77f947be-aca5-49de-a8a9-ac1febdcedc6.webp",
     "isAvailable": true
   },
   {
@@ -36,7 +36,7 @@
     "name": "Sprite 2,25l",
     "price": 8500,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/753caeb7-7433-4235-bae2-11f7acdc1073.jpg",
+    "imageUrl": "/uploads/753caeb7-7433-4235-bae2-11f7acdc1073.webp",
     "isAvailable": true
   },
   {
@@ -44,7 +44,7 @@
     "name": "Tonica Schweppes 1,5l",
     "price": 6000,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/2d00a45f-972a-4af9-96a1-f5fe78783634.jpg",
+    "imageUrl": "/uploads/2d00a45f-972a-4af9-96a1-f5fe78783634.webp",
     "isAvailable": true
   },
   {
@@ -52,7 +52,7 @@
     "name": "Tonica Cunnington 2,25l",
     "price": 5000,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/85b764de-fef9-4c04-b9c4-643511179c92.jpg",
+    "imageUrl": "/uploads/85b764de-fef9-4c04-b9c4-643511179c92.webp",
     "isAvailable": true
   },
   {
@@ -60,7 +60,7 @@
     "name": "Pomelo Schweppes 1,5l",
     "price": 6000,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/a06dd2a0-b6c4-41ec-ae38-baa1c2189097.jpg",
+    "imageUrl": "/uploads/a06dd2a0-b6c4-41ec-ae38-baa1c2189097.webp",
     "isAvailable": true
   },
   {
@@ -68,7 +68,7 @@
     "name": "Pomelo Cunnington 2,25l",
     "price": 5000,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/4c73f036-06fb-4cca-b797-2ebb108f5307.jpg",
+    "imageUrl": "/uploads/4c73f036-06fb-4cca-b797-2ebb108f5307.webp",
     "isAvailable": true
   },
   {
@@ -76,7 +76,7 @@
     "name": "Speed 250ml",
     "price": 3500,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/52dcf173-20ed-448f-9e88-479cb9274389.jpg",
+    "imageUrl": "/uploads/52dcf173-20ed-448f-9e88-479cb9274389.webp",
     "isAvailable": true
   },
   {
@@ -84,7 +84,7 @@
     "name": "Red Bull 250ml",
     "price": 5000,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/0ac3f639-9a39-4eac-bc43-deea59bb2b83.jpg",
+    "imageUrl": "/uploads/0ac3f639-9a39-4eac-bc43-deea59bb2b83.webp",
     "isAvailable": true
   },
   {
@@ -92,7 +92,7 @@
     "name": "Jugo Baggio 1,5l",
     "price": 5000,
     "category": "Bebidas Sin Alcohol",
-    "imageUrl": "/uploads/71140542-a9d5-47e4-bce5-b1985eca7521.jpg",
+    "imageUrl": "/uploads/71140542-a9d5-47e4-bce5-b1985eca7521.webp",
     "isAvailable": true
   }
 ]
