@@ -3,8 +3,10 @@ import api from '../services/clienteApi';
 import { useCart } from '../context/ContextoCarrito.jsx';
 import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 
-const ImagenOptimizada = ({ src, alt }) => {
+const ImagenOptimizada = ({ src, srcSm, alt }) => {
   const [cargada, setCargada] = useState(false);
+  const finalSrcSm = srcSm || src;
+
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative', background: 'var(--bg-secondary)', overflow: 'hidden' }}>
       {!cargada && (
@@ -22,6 +24,8 @@ const ImagenOptimizada = ({ src, alt }) => {
       )}
       <img
         src={src}
+        srcSet={`${finalSrcSm} 400w, ${src} 800w`}
+        sizes="(max-width: 600px) 400px, 800px"
         alt={alt}
         loading="lazy"
         onLoad={() => setCargada(true)}
@@ -272,6 +276,7 @@ export default function Catalogo() {
                 <div style={{ width: '100%', height: '200px', position: 'relative', overflow: 'hidden', background: 'var(--bg-secondary)' }}>
                   <ImagenOptimizada 
                     src={product.imageUrl} 
+                    srcSm={product.imageUrlSm}
                     alt={product.name} 
                   />
                   <span style={{

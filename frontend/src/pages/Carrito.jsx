@@ -56,7 +56,7 @@ export default function Carrito() {
               }}
             >
               <img 
-                src={item.product.imageUrl} 
+                src={item.product.imageUrlSm || item.product.imageUrl} 
                 alt={item.product.name} 
                 loading="lazy"
                 style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '10px' }}

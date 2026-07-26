@@ -3,15 +3,28 @@ import { ErrorAplicacion } from '../utils/errorAplicacion.js';
 
 const mapProductImageUrl = (req, product) => {
   if (!product) return product;
+  const protocol = req.protocol;
+  const host = req.get('host');
+  
+  const mapped = { ...product };
+  
   if (product.imageUrl && product.imageUrl.startsWith('/uploads/')) {
-    const protocol = req.protocol;
-    const host = req.get('host');
-    return {
-      ...product,
-      imageUrl: `${protocol}://${host}${product.imageUrl}`
-    };
+    mapped.imageUrl = `${protocol}://${host}${product.imageUrl}`;
+    
+    // Add small image URL
+    const lastDotIndex = product.imageUrl.lastIndexOf('.');
+    if (lastDotIndex !== -1) {
+      const basePath = product.imageUrl.substring(0, lastDotIndex);
+      const extension = product.imageUrl.substring(lastDotIndex);
+      mapped.imageUrlSm = `${protocol}://${host}${basePath}-sm${extension}`;
+    } else {
+      mapped.imageUrlSm = `${protocol}://${host}${product.imageUrl}-sm`;
+    }
+  } else {
+    // If it's external or base64 fallback
+    mapped.imageUrlSm = product.imageUrl;
   }
-  return product;
+  return mapped;
 };
 
 export const getAllProducts = async (req, res, next) => {

@@ -37,19 +37,28 @@ const saveBase64Image = async (base64Str) => {
     const buffer = Buffer.from(matches[2], 'base64');
     
     // We force output format to webp for optimum size/quality ratio
-    const filename = `${crypto.randomUUID()}.webp`;
+    const uuid = crypto.randomUUID();
+    const filename = `${uuid}.webp`;
+    const filenameSm = `${uuid}-sm.webp`;
     const uploadsDir = path.join(__dirname, '../../uploads');
     
     // Ensure uploads directory exists
     await fs.mkdir(uploadsDir, { recursive: true });
     
     const destPath = path.join(uploadsDir, filename);
+    const destPathSm = path.join(uploadsDir, filenameSm);
     
-    // Process image: limit width to 800px (keeping aspect ratio) and convert to webp quality 80
+    // Main image: limit width to 800px (keeping aspect ratio) and convert to webp quality 80
     await sharp(buffer)
       .resize({ width: 800, withoutEnlargement: true })
       .webp({ quality: 80 })
       .toFile(destPath);
+
+    // Small thumbnail image: limit width to 400px and convert to webp quality 75
+    await sharp(buffer)
+      .resize({ width: 400, withoutEnlargement: true })
+      .webp({ quality: 75 })
+      .toFile(destPathSm);
     
     return `/uploads/${filename}`;
   } catch (error) {
@@ -118,8 +127,62 @@ const initData = async () => {
 
     await fs.writeFile(filePath, JSON.stringify(allProducts, null, 2));
     console.log('📦 Base de datos de productos regenerada exitosamente a partir de las categorías.');
+    
+    // Autogenerar miniaturas faltantes para imágenes existentes
+    await ensureThumbnailsExist();
   } catch (error) {
     console.error('Error al inicializar la base de datos de productos:', error);
+  }
+};
+
+const ensureThumbnailsExist = async () => {
+  try {
+    const uploadsDir = path.join(__dirname, '../../uploads');
+    const files = await fs.readdir(uploadsDir).catch(() => []);
+    
+    // Filtramos los archivos que son imágenes originales (no contienen '-sm')
+    const imageExtensions = /\.(webp|jpg|jpeg|png)$/i;
+    const originalImages = files.filter(file => {
+      return imageExtensions.test(file) && !file.includes('-sm.');
+    });
+
+    if (originalImages.length > 0) {
+      console.log(`🔍 Escaneando uploads: se encontraron ${originalImages.length} imágenes originales a verificar.`);
+    }
+
+    for (const file of originalImages) {
+      const ext = path.extname(file);
+      const nameWithoutExt = path.basename(file, ext);
+      const thumbFilename = `${nameWithoutExt}-sm${ext}`;
+      
+      const thumbPath = path.join(uploadsDir, thumbFilename);
+      const originalPath = path.join(uploadsDir, file);
+
+      // Verificamos si ya existe la miniatura
+      try {
+        await fs.access(thumbPath);
+      } catch (err) {
+        // Si no existe, la creamos
+        console.log(`⚙️ Generando miniatura faltante para: ${file}`);
+        const buffer = await fs.readFile(originalPath);
+        
+        let sharpInstance = sharp(buffer).resize({ width: 400, withoutEnlargement: true });
+        
+        // Mantener el formato original o forzar webp si era webp
+        if (ext.toLowerCase() === '.webp') {
+          sharpInstance = sharpInstance.webp({ quality: 75 });
+        } else if (ext.toLowerCase() === '.png') {
+          sharpInstance = sharpInstance.png({ quality: 75 });
+        } else {
+          sharpInstance = sharpInstance.jpeg({ quality: 75 });
+        }
+
+        await sharpInstance.toFile(thumbPath);
+        console.log(`✅ Miniatura creada: ${thumbFilename}`);
+      }
+    }
+  } catch (error) {
+    console.error('Error al generar miniaturas faltantes:', error);
   }
 };
 

@@ -487,7 +487,7 @@ export default function Admin() {
                   }}>
                     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                       <img
-                        src={product.imageUrl}
+                        src={product.imageUrlSm || product.imageUrl}
                         alt={product.name}
                         loading="lazy"
                         style={{
