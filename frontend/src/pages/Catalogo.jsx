@@ -1,11 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '../services/clienteApi';
 import { useCart } from '../context/ContextoCarrito.jsx';
 import { useStoreConfig } from '../context/ContextoConfiguracion.jsx';
 
 const ImagenOptimizada = ({ src, srcSm, alt }) => {
   const [cargada, setCargada] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    // Si la imagen ya se cargó (por ejemplo, desde la caché del navegador), marcamos cargada como true de inmediato
+    if (imgRef.current && imgRef.current.complete) {
+      setCargada(true);
+    }
+  }, [src, srcSm]);
+
   const finalSrcSm = srcSm || src;
+  const hasDistinctThumbnail = srcSm && srcSm !== src;
 
   return (
     <div style={{ width: '100%', height: '100%', position: 'relative', background: 'var(--bg-secondary)', overflow: 'hidden' }}>
@@ -23,9 +33,10 @@ const ImagenOptimizada = ({ src, srcSm, alt }) => {
         />
       )}
       <img
+        ref={imgRef}
         src={src}
-        srcSet={`${finalSrcSm} 400w, ${src} 800w`}
-        sizes="(max-width: 600px) 400px, 800px"
+        srcSet={hasDistinctThumbnail ? `${finalSrcSm} 400w, ${src} 800w` : undefined}
+        sizes={hasDistinctThumbnail ? "(max-width: 600px) 400px, 800px" : undefined}
         alt={alt}
         loading="lazy"
         onLoad={() => setCargada(true)}
