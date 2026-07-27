@@ -29,6 +29,11 @@ app.use('/api/products', rutasProducto);
 app.use('/api/orders', rutasPedido);
 app.use('/api/config', rutasConfig);
 
+// Ruta de salud para keep-alive / ping
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date() });
+});
+
 app.use((req, res, next) => {
   next(new ErrorAplicacion(`No se pudo encontrar la ruta ${req.originalUrl} en este servidor.`, 404));
 });
